@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ce">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chechen Latin Script</title>
+  <meta name="description" content="Convert Chechen Cyrillic text to the official 1992 Latin alphabet. Free and open source. Everything is converted in your browser.">
+  <meta name="theme-color" content="#E4ECD6">
+  <meta property="og:title" content="Chechen Latin Script">
+  <meta property="og:description" content="Chechen Cyrillic to Latin (1992), in your browser. Free, open source, nothing is sent to a server.">
+  <meta property="og:type" content="website">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <!-- Polices empaquetées avec le site (aucune requête externe, fonctionne hors ligne) -->
+  <link rel="stylesheet" href="fonts.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="web">
+
+<!-- En-tête pleine largeur -->
+<header class="banner">
+  <div class="hero-deco" aria-hidden="true"><span class="c1"></span><span class="c2"></span></div>
+  <div class="hero-inner">
+    <div class="banner-row">
+      <div class="banner-title">
+        <img src="icons/logo-96.png" alt="">
+        <span class="name-cap">CHECHEN</span>
+        <span class="name-script">&nbsp;Latin Script</span>
+      </div>
+      <div class="lang-wrap">
+      <button id="langBtn" class="lang-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="langMenu" aria-label="Mott : Noxçiyŋ" title="Mott : Noxçiyŋ">
+        <span id="langFlag" class="flag flag-ce" aria-hidden="true"></span>
+        <span id="langCode">CE</span>
+        <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div id="langMenu" class="lang-menu" role="menu" hidden>
+        <button type="button" class="lang-item" role="menuitemradio" aria-checked="true" data-lang="ce"><span class="flag flag-ce" aria-hidden="true"></span><span class="lang-name">Noxçiyŋ</span><span class="lang-code">CE</span><svg class="lang-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button type="button" class="lang-item" role="menuitemradio" aria-checked="false" data-lang="en"><span class="flag flag-en" aria-hidden="true"></span><span class="lang-name">English</span><span class="lang-code">EN</span><svg class="lang-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button type="button" class="lang-item" role="menuitemradio" aria-checked="false" data-lang="fr"><span class="flag flag-fr" aria-hidden="true"></span><span class="lang-name">Français</span><span class="lang-code">FR</span><svg class="lang-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button type="button" class="lang-item" role="menuitemradio" aria-checked="false" data-lang="ru"><span class="flag flag-ru" aria-hidden="true"></span><span class="lang-name">Русский</span><span class="lang-code">RU</span><svg class="lang-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button type="button" class="lang-item" role="menuitemradio" aria-checked="false" data-lang="de"><span class="flag flag-de" aria-hidden="true"></span><span class="lang-name">Deutsch</span><span class="lang-code">DE</span><svg class="lang-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button type="button" class="lang-item" role="menuitemradio" aria-checked="false" data-lang="tr"><span class="flag flag-tr" aria-hidden="true"></span><span class="lang-name">Türkçe</span><span class="lang-code">TR</span><svg class="lang-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button type="button" class="lang-item" role="menuitemradio" aria-checked="false" data-lang="es"><span class="flag flag-es" aria-hidden="true"></span><span class="lang-name">Español</span><span class="lang-code">ES</span><svg class="lang-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button type="button" class="lang-item" role="menuitemradio" aria-checked="false" data-lang="ar"><span class="flag flag-ar" aria-hidden="true"></span><span class="lang-name">العربية</span><span class="lang-code">AR</span><svg class="lang-check" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+    </div>
+    </div>
+    <div id="sub" class="subtitle"></div>
+  </div>
+  <div class="flag-stripe" aria-hidden="true"></div>
+</header>
+
+<div id="layout">
+<div id="mainCol">
+
+  <!-- Carte de saisie : cyrillique -> latin -->
+  <div id="cardTranscriber" class="card card-transcriber">
+    <div class="card-head">
+      <label id="lblCyr" class="label-upper" for="input">Kirillica</label>
+    </div>
+    <textarea id="input" dir="auto" spellcheck="false" rows="1" autocomplete="off" autocapitalize="off" placeholder=""></textarea>
+
+    <button id="misalHint" class="misal-hint" type="button">✎ <span id="lblMisal">Masal</span></button>
+
+    <!-- Résultat (apparaît dès qu'il y a du texte) -->
+    <div id="outBlock" class="out-block">
+      <div class="out-panel">
+        <div class="out-head">
+          <span id="lblLat" class="lat">Latin</span>
+          <div class="out-actions">
+            <button id="btnReport" class="btn-copy" type="button">⚑ <span id="lblReport">Djaxaiyta</span></button>
+            <button id="btnCopy" class="btn-copy" type="button">⧉ <span id="lblCopy">Kopi yaŋ</span></button>
+          </div>
+        </div>
+        <div id="output" dir="ltr" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <!-- Alphabet latin : aide à la saisie des lettres (replié par défaut) -->
+    <div class="alpha-block">
+      <button id="alphaToggle" class="alpha-toggle" type="button" aria-expanded="false" aria-controls="alphaBody">
+        <span class="alpha-glyph" aria-hidden="true">ẋ</span>
+        <span id="lblAlpha">Latin</span>
+        <svg class="alpha-chev" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div id="alphaBody" class="alpha-body" hidden>
+        <div class="alpha-field">
+          <textarea id="latInput" dir="ltr" spellcheck="false" rows="2" placeholder="Write in Latin…"></textarea>
+          <div class="alpha-field-actions">
+            <div class="alpha-tools">
+              <button id="alphaShift" class="alpha-shift" type="button" aria-pressed="false" title="Uppercase" aria-label="Uppercase">⇧</button>
+              <button id="alphaClear" class="btn-copy" type="button" title="Clear" aria-label="Clear">✕</button>
+            </div>
+            <button id="alphaCopy" class="btn-copy" type="button">⧉ <span id="lblAlphaCopy">Copy</span></button>
+          </div>
+        </div>
+        <div id="alphaKeys" class="alpha-keys" role="group"></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="web-note">
+    <svg class="web-lock" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M7 11V8a5 5 0 0 1 10 0v3M6 11h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span id="privacy"></span>
+  </p>
+  <p id="reportNote" class="web-note web-note-small"></p>
+  <p class="web-foot">
+    <span id="verFoot"></span> ·
+    <span id="lblLicense">License</span> <a id="aboutLicense" href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener noreferrer">Apache 2.0</a> ·
+    <span id="lblContact">Contact</span> <a id="aboutContact" href="mailto:linguachechen@gmail.com">linguachechen@gmail.com</a> ·
+    <button id="btnReportProblem" class="web-link" type="button">Ġalat djaxaiyta</button> ·
+    LinguaCE
+  </p>
+
+</div><!-- /mainCol -->
+</div><!-- /layout -->
+
+  <noscript><p class="web-note">This page needs JavaScript to convert text.</p></noscript>
+  <script src="data.js"></script>
+  <script src="engine/shim.js"></script>
+  <script src="engine/transliterate.js"></script>
+  <script src="i18n.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

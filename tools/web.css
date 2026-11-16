@@ -1,0 +1,164 @@
+/* ---- Surcharges propres à la version web (ajoutées APRÈS la feuille de style de la popup de l'extension) ---- */
+
+/* Page : crème chaud, avec une lueur verte en haut */
+html { background: #F1EDE0; }
+body.web {
+  width: auto; max-width: none; min-height: 100vh; margin: 0; padding: 0;
+  background:
+    radial-gradient(900px 420px at 85% 110px, rgba(27,142,76,.10), rgba(27,142,76,0) 70%),
+    radial-gradient(700px 380px at 5% 520px, rgba(217,37,29,.05), rgba(217,37,29,0) 70%),
+    #F1EDE0;
+}
+
+/* ---- En-tête : bandeau vert profond, pleine largeur, liseré aux couleurs du drapeau ---- */
+body.web .banner {
+  display: block; position: relative; border-radius: 0; padding: 0;
+  background:
+    radial-gradient(520px 260px at 92% -20%, rgba(35,168,94,.30), rgba(35,168,94,0) 70%),
+    radial-gradient(420px 220px at 6% 120%, rgba(255,255,255,.75), rgba(255,255,255,0) 70%),
+    #E4ECD6;
+  color: #1A1A14;
+  box-shadow: 0 6px 22px rgba(60,90,40,.12);
+}
+.hero-deco { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.hero-deco span { position: absolute; border-radius: 50%; }
+.hero-deco .c1 { width: 300px; height: 300px; right: -80px; top: -140px; border: 2px solid rgba(27,142,76,.16); background: radial-gradient(circle, rgba(255,255,255,.55), rgba(255,255,255,0) 70%); }
+.hero-deco .c2 { width: 190px; height: 190px; left: 34%; bottom: -120px; border: 2px solid rgba(27,142,76,.12); }
+.hero-inner { position: relative; max-width: 680px; margin: 0 auto; padding: 18px 14px 34px; }
+.banner-row { display: flex; align-items: center; gap: 10px; }
+body.web .banner img { width: 58px; height: 58px; padding: 0; border-radius: 0; background: none; box-shadow: none; mix-blend-mode: multiply; }
+body.web .banner .name-cap { color: #1A1A14; font-size: clamp(19px, 5.2vw, 27px); letter-spacing: .09em; }
+body.web .banner .name-script { color: #147139; font-size: clamp(26px, 7vw, 40px); }
+body.web .subtitle {
+  margin: 14px 2px 0; text-align: start; color: #4E5A44;
+  font: 600 clamp(14px, 3.6vw, 17px)/1.4 'Hanken Grotesk', 'Noto Sans', sans-serif; letter-spacing: .01em;
+}
+.flag-stripe { position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: linear-gradient(180deg, #FFFFFF 0 22%, #D9251D 22% 78%, #FFFFFF 78% 100%); box-shadow: 0 -1px 0 rgba(0,0,0,.08); }
+body.web .lang-btn { height: 34px; padding: 0 10px 0 8px; box-shadow: 0 3px 10px rgba(40,70,30,.14); background: rgba(255,255,255,.92); border-color: rgba(0,0,0,.08); }
+body.web .lang-btn .flag { width: 24px; height: 16px; }
+body.web .lang-btn:hover, body.web .lang-btn[aria-expanded="true"] { background: #E8F3EC; color: #1B8E4C; border-color: #BFE3CC; }
+body.web .lang-menu { z-index: 30; }
+
+/* ---- Carte principale : superposée au bandeau ---- */
+body.web #layout { max-width: 680px; margin: 22px auto 0; padding: 0 10px 34px; position: relative; z-index: 2; }
+body.web .card-transcriber {
+  margin-top: 0; padding: 22px; border-radius: 24px; border: 1px solid #E2E8D6;
+  box-shadow: 0 22px 48px rgba(15,70,38,.16), 0 3px 8px rgba(0,0,0,.05);
+}
+body.web .card-head { min-height: 0; margin-bottom: 12px; }
+body.web label.label-upper {
+  display: inline-block; margin: 0; padding: 6px 12px; border-radius: 999px; cursor: text;
+  background: #E8F3EC; color: #147139; font-size: 11.5px; letter-spacing: .12em;
+}
+
+/* ---- Saisie cyrillique : un vrai champ, grand et lisible ---- */
+body.web textarea#input {
+  max-height: none; padding: 14px 16px; min-height: 58px;
+  font: 600 21px/1.5 'Noto Sans', sans-serif; color: #1B1A16;
+  background: #FBFAF4; border: 2px solid #E1E6D3; border-radius: 16px; outline: none;
+  transition: border-color .15s, box-shadow .15s, background .15s;
+}
+body.web textarea#input::placeholder { color: #A9A38F; font-weight: 500; }
+body.web textarea#input:hover { border-color: #C9D6B8; }
+body.web textarea#input:focus { background: #fff; border-color: #1B8E4C; box-shadow: 0 0 0 5px rgba(27,142,76,.16); }
+
+body.web .misal-hint {
+  margin-top: 12px; padding: 8px 14px; border-radius: 999px; font-size: 13px;
+  background: #fff; border: 1.5px dashed #BFD2B5; color: #3E6E4D;
+}
+body.web .misal-hint:hover { background: #EAF4ED; border-style: solid; color: #147139; }
+
+/* ---- Résultat : panneau vert bien visible ---- */
+body.web .out-divider { display: none; }
+body.web .out-panel {
+  margin-top: 0; padding: 14px 18px 16px; border-radius: 18px;
+  background: linear-gradient(160deg, #EAF6EE 0%, #DCEFE3 100%);
+  border: 1.5px solid #BFDFCB;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
+}
+body.web .out-head { margin-bottom: 8px; }
+body.web .out-head .lat { font-size: 12px; color: #147139; letter-spacing: .14em; }
+body.web #output { max-height: none; overflow-y: visible; font: 700 clamp(20px, 5vw, 25px)/1.5 'Noto Sans', sans-serif; color: #147139; }
+body.web .out-actions { gap: 8px; }
+body.web .out-panel .btn-copy {
+  padding: 8px 14px; border-radius: 999px; font-size: 13px; font-weight: 700;
+  border: 1.5px solid #BFDFCB; background: rgba(255,255,255,.75); color: #2D6B47;
+  transition: background .15s, color .15s, transform .08s, box-shadow .15s;
+}
+body.web .out-panel .btn-copy:hover { background: #fff; color: #147139; }
+body.web .out-panel #btnCopy {
+  background: linear-gradient(160deg, #23A85E, #147139); color: #fff; border-color: transparent;
+  box-shadow: 0 6px 14px rgba(19,122,64,.34);
+}
+body.web .out-panel #btnCopy:hover { filter: brightness(1.07); color: #fff; }
+body.web .out-panel .btn-copy:active { transform: scale(.96); }
+body.web .out-panel #btnCopy.done { background: #147139; }
+
+/* ---- Palette : touches en relief ---- */
+body.web .alpha-block { margin-top: 18px; padding-top: 16px; border-top: 1.5px dashed #D9DDCB; }
+body.web .alpha-toggle {
+  padding: 10px 14px; border-radius: 14px; background: #F3F0E4; color: #5E5A49; font-size: 13.5px;
+  transition: background .15s, color .15s;
+}
+body.web .alpha-toggle:hover { background: #E8F3EC; color: #147139; }
+body.web .alpha-toggle .alpha-glyph { font-size: 18px; width: 22px; }
+body.web .alpha-body { margin-top: 12px; }
+body.web .alpha-field { border: 2px solid #E1E6D3; background: #FBFAF4; border-radius: 16px; padding: 10px 12px; }
+body.web textarea#latInput { font-size: 19px; font-weight: 600; color: #147139; min-height: 52px; }
+body.web .alpha-field-actions .btn-copy { font-weight: 700; }
+body.web .alpha-shift { height: 34px; min-width: 40px; border-radius: 10px; border-width: 1.5px; font-size: 17px; }
+body.web .alpha-keys { grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 8px; margin-top: 14px; }
+body.web .alpha-key {
+  height: 48px; border-radius: 13px; font-size: 19px; font-weight: 700;
+  background: linear-gradient(180deg, #FFFFFF, #F7F4EA); border: 1px solid #E3DDC9;
+  box-shadow: 0 3px 0 #DDD6C0, 0 6px 10px rgba(60,50,20,.06); color: #24221B;
+  transition: transform .06s, box-shadow .06s, background .12s, color .12s, border-color .12s;
+}
+body.web .alpha-key.sp {
+  background: linear-gradient(180deg, #F4FBF6, #E1F1E7); border-color: #B9DCC6; color: #0B5A30;
+  box-shadow: 0 3px 0 #A9D0B7, 0 6px 10px rgba(20,100,55,.10);
+}
+body.web .alpha-key:hover { transform: translateY(-1px); border-color: #7FC59A; color: #147139; }
+body.web .alpha-key:active { transform: translateY(2px); box-shadow: 0 1px 0 #B8CFC0; }
+body.web .alpha-sep { margin: 4px 0; background: #E4E0D0; }
+
+/* ---- Bas de page ---- */
+.web-note {
+  display: flex; align-items: center; justify-content: center; gap: 8px; text-align: center;
+  margin: 22px auto 8px; padding: 9px 16px; max-width: 520px; border-radius: 999px;
+  background: rgba(255,255,255,.7); border: 1px solid #E2E8D6;
+  font: 600 13px/1.45 'Hanken Grotesk', 'Noto Sans', sans-serif; color: #3E6E4D;
+}
+.web-lock { flex: none; color: #1B8E4C; }
+.web-note-small {
+  display: block; margin: 0 auto 6px; padding: 0 12px; background: none; border: none; border-radius: 0;
+  font-size: 11.5px; font-weight: 500; color: #8E8872; max-width: 560px;
+}
+.web-foot {
+  text-align: center; margin: 14px 8px 0; font: 500 12.5px/1.9 'Hanken Grotesk', 'Noto Sans', sans-serif; color: #8E8872;
+}
+.web-foot a, .web-link { color: #147139; text-decoration: none; font-weight: 600; }
+.web-link { border: none; background: none; padding: 0; cursor: pointer; font-family: inherit; font-size: inherit; }
+.web-foot a:hover, .web-link:hover { text-decoration: underline; }
+.web-foot a:focus-visible, .web-link:focus-visible, .misal-hint:focus-visible, .btn-copy:focus-visible { outline: 3px solid rgba(27,142,76,.55); outline-offset: 2px; border-radius: 6px; }
+
+/* écran assez large : la carte chevauche le bandeau et laisse voir le liseré du drapeau de chaque côté */
+@media (min-width: 720px) {
+  .hero-inner { padding: 22px 16px 64px; }
+  body.web #layout { margin-top: -34px; padding: 0 16px 34px; }
+}
+@container (max-width: 205px) { body.web .banner .name-script { display: none; } }
+@media (max-width: 480px) {
+  body.web .banner img { width: 44px; height: 44px; padding: 5px; }
+  body.web .banner .name-cap { font-size: 15px; letter-spacing: .06em; }
+  body.web .banner .name-script { font-size: 21px; }
+  body.web .lang-btn { height: 32px; padding: 0 8px 0 7px; }
+  body.web .lang-btn #langCode { display: none; } /* sur téléphone : drapeau seul (le nom de la langue est dans le menu) */
+  body.web .card-transcriber { padding: 16px; border-radius: 20px; }
+  body.web textarea#input { font-size: 19px; }
+  body.web .alpha-keys { grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 7px; }
+  body.web .alpha-key { height: 46px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
