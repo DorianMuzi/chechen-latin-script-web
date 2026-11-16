@@ -106,7 +106,8 @@
     el.reportNote.textContent = REPORT_NOTE[state.lang] || REPORT_NOTE.en;
     el.lblReport.textContent = t.report;
     el.btnReportProblem.textContent = t.reportProblem;
-    el.verFoot.textContent = t.aboutVersion + ' ' + WEB_VERSION;
+    // En tchétchène, « Versi » se place après le numéro
+    el.verFoot.textContent = state.lang === 'ce' ? WEB_VERSION + ' ' + t.aboutVersion : t.aboutVersion + ' ' + WEB_VERSION;
     el.verFoot.title = 'engine ' + (window.CLS_ENGINE_VERSION || '');
     el.lblLicense.textContent = t.aboutLicense;
     el.lblContact.textContent = t.aboutContact;
