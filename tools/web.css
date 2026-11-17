@@ -26,7 +26,7 @@
   --text: #1A1A14;
   --text-field: #1B1A16;
   --text-soft: #66664A;
-  --banner-title: var(--deep-indigo);   /* « CHECHEN » et « Latin Script » sur le jaune (contraste très élevé) */
+  --banner-title: var(--text);   /* « CHECHEN » et « Latin Script » en noir sur le jaune (choix de l'utilisateur, comme l'extension) */
   --text-subtitle: #3F5715;   /* sous-titre sur le jaune : olive foncé (contraste ~7,6) */
   --placeholder: #8A8C62;
   --on-brand: #FFFFFF;
