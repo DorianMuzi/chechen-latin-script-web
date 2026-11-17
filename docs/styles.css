@@ -477,150 +477,216 @@
   
 /* ---- Surcharges propres à la version web (ajoutées APRÈS la feuille de style de la popup de l'extension) ---- */
 
-/* Page : crème chaud, avec une lueur verte en haut */
-html { background: #F1EDE0; }
+/* ---- Couleurs : palette du « livre de couleurs » + RÔLES ----
+   Les couleurs de la palette (CMYK du livre converties en RVB, sans profil d'impression) :
+     Sulphur Yellow  C4 M4 Y28 K0     -> #F5F5B8
+     Eugenia Red     C7 M76 Y60 K0    -> #ED3D66
+     Olive Green     C56 M40 Y85 K22  -> #58771E
+     Cossack Green   C76 M32 Y91 K18  -> #328E13
+   Le reste de la feuille n'utilise que des RÔLES (var(--...)) : un futur mode sombre ne sera qu'un second jeu de valeurs
+   pour ces rôles (voir le bloc :root[data-theme="dark"] à ajouter), sans toucher aux composants. */
+:root {
+  --sulphur-yellow: #F5F5B8;
+  --eugenia-red: #ED3D66;
+  --olive-green: #58771E;
+  --cossack-green: #328E13;
+  --cossack-rgb: 50, 142, 19;
+  --olive-rgb: 88, 119, 30;
+  --eugenia-rgb: 237, 61, 102;
+
+  /* surfaces et textes (mode clair) */
+  --page-bg: #F1EDE0;
+  --surface: #FFFFFF;
+  --surface-field: #FFFEF2;
+  --banner-bg: var(--sulphur-yellow);
+  --text: #1A1A14;
+  --text-field: #1B1A16;
+  --text-soft: #8A8A66;
+  --text-subtitle: #58771E;
+  --placeholder: #A8AA82;
+  --on-brand: #FFFFFF;
+
+  /* couleur principale (boutons, focus, liens) */
+  --brand: var(--cossack-green);
+  --brand-light: #3E9E1E;
+  --brand-dark: #2A7A10;
+
+  /* accent olive (texte du résultat, étiquettes, touches spéciales) */
+  --accent: var(--olive-green);
+  --accent-strong: #4A6618;
+  --accent-deep: #3F5715;
+  --accent-tint: #EDF2DA;
+  --accent-border: #CBD9A0;
+  --result-bg-top: #F7F9E6;
+  --result-bg-bottom: #EDF2D3;
+
+  /* contours et petits fonds */
+  --border-card: #E6E8C8;
+  --border-field: #E4E6C2;
+  --border-field-hover: #CBD59A;
+  --border-dash: #DADFB0;
+  --chip-bg: var(--sulphur-yellow);
+  --toggle-bg: #F3F3D2;
+  --key-top: #FFFFFF;
+  --key-bottom: #FAFAE6;
+  --key-border: #E4E6C2;
+  --key-edge: #DADDB0;
+  --key-sp-top: #F2F7DF;
+  --key-sp-bottom: #E1ECC0;
+  --key-sp-border: #BCD08A;
+  --key-sp-edge: #AFC47A;
+  --key-hover-border: #7FB35A;
+  --shadow-rgb: 88, 119, 30;
+
+  /* drapeau */
+  --flag-red: var(--eugenia-red);
+}
+
+/* Page : crème neutre (la palette n'est qu'en accents, pour que le mode sombre reste simple) */
+html { background: var(--page-bg); }
 body.web {
   width: auto; max-width: none; min-height: 100vh; margin: 0; padding: 0;
   background:
-    radial-gradient(900px 420px at 85% 110px, rgba(27,142,76,.10), rgba(27,142,76,0) 70%),
-    radial-gradient(700px 380px at 5% 520px, rgba(176,84,72,.04), rgba(176,84,72,0) 70%),
-    #F1EDE0;
+    radial-gradient(900px 420px at 85% 110px, rgba(var(--cossack-rgb), .08), rgba(var(--cossack-rgb), 0) 70%),
+    radial-gradient(700px 380px at 5% 520px, rgba(var(--eugenia-rgb), .05), rgba(var(--eugenia-rgb), 0) 70%),
+    var(--page-bg);
 }
 
-/* ---- En-tête : bandeau vert profond, pleine largeur, liseré aux couleurs du drapeau ---- */
+/* ---- En-tête : bandeau Sulphur Yellow, pleine largeur, liseré aux couleurs du drapeau ---- */
 body.web .banner {
   display: block; position: relative; border-radius: 0; padding: 0;
   background:
-    radial-gradient(520px 260px at 92% -20%, rgba(90,150,112,.24), rgba(90,150,112,0) 70%),
-    radial-gradient(420px 220px at 6% 120%, rgba(255,255,255,.75), rgba(255,255,255,0) 70%),
-    #E4ECD6;
-  color: #1A1A14;
-  box-shadow: 0 6px 22px rgba(60,90,40,.12);
+    radial-gradient(520px 260px at 92% -20%, rgba(var(--cossack-rgb), .16), rgba(var(--cossack-rgb), 0) 70%),
+    radial-gradient(420px 220px at 6% 120%, rgba(255,255,255,.7), rgba(255,255,255,0) 70%),
+    var(--banner-bg);
+  color: var(--text);
+  box-shadow: 0 6px 22px rgba(var(--shadow-rgb), .14);
 }
 .hero-deco { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 .hero-deco span { position: absolute; border-radius: 50%; }
-.hero-deco .c1 { width: 300px; height: 300px; right: -80px; top: -140px; border: 2px solid rgba(27,142,76,.16); background: radial-gradient(circle, rgba(255,255,255,.55), rgba(255,255,255,0) 70%); }
-.hero-deco .c2 { width: 190px; height: 190px; left: 34%; bottom: -120px; border: 2px solid rgba(27,142,76,.12); }
+.hero-deco .c1 { width: 300px; height: 300px; right: -80px; top: -140px; border: 2px solid rgba(var(--cossack-rgb), .20); background: radial-gradient(circle, rgba(255,255,255,.55), rgba(255,255,255,0) 70%); }
+.hero-deco .c2 { width: 190px; height: 190px; left: 34%; bottom: -120px; border: 2px solid rgba(var(--cossack-rgb), .14); }
 .hero-inner { position: relative; max-width: 680px; margin: 0 auto; padding: 18px 14px 34px; }
 .banner-row { display: flex; align-items: center; gap: 10px; }
 body.web .banner img { width: 58px; height: 58px; padding: 0; border-radius: 0; background: none; box-shadow: none;  }
-body.web .banner .name-cap { color: #1A1A14; font-size: clamp(19px, 5.2vw, 27px); letter-spacing: .09em; }
-body.web .banner .name-script { color: #147139; font-size: clamp(26px, 7vw, 40px); }
+body.web .banner .name-cap { color: var(--text); font-size: clamp(19px, 5.2vw, 27px); letter-spacing: .09em; }
+body.web .banner .name-script { color: var(--brand); font-size: clamp(26px, 7vw, 40px); }
 body.web .subtitle {
-  margin: 14px 2px 0; text-align: start; color: #4E5A44;
+  margin: 14px 2px 0; text-align: start; color: var(--text-subtitle);
   font: 600 clamp(14px, 3.6vw, 17px)/1.4 'Hanken Grotesk', 'Noto Sans', sans-serif; letter-spacing: .01em;
 }
-.flag-stripe { position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: linear-gradient(180deg, #FFFFFF 0 22%, #B8574D 22% 78%, #FFFFFF 78% 100%); box-shadow: 0 -1px 0 rgba(0,0,0,.08); }
-body.web .lang-btn { height: 34px; padding: 0 10px 0 8px; box-shadow: 0 3px 10px rgba(40,70,30,.14); background: rgba(255,255,255,.92); border-color: rgba(0,0,0,.08); }
+.flag-stripe { position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: linear-gradient(180deg, #FFFFFF 0 22%, var(--flag-red) 22% 78%, #FFFFFF 78% 100%); box-shadow: 0 -1px 0 rgba(0,0,0,.08); }
+body.web .lang-btn { height: 34px; padding: 0 10px 0 8px; box-shadow: 0 3px 10px rgba(var(--shadow-rgb), .16); background: rgba(255,255,255,.92); border-color: rgba(0,0,0,.08); }
 body.web .lang-btn .flag { width: 24px; height: 16px; }
-body.web .lang-btn:hover, body.web .lang-btn[aria-expanded="true"] { background: #E8F3EC; color: #1B8E4C; border-color: #BFE3CC; }
+body.web .lang-btn:hover, body.web .lang-btn[aria-expanded="true"] { background: var(--accent-tint); color: var(--brand); border-color: var(--accent-border); }
 body.web .lang-menu { z-index: 30; }
 
 /* ---- Carte principale : superposée au bandeau ---- */
 body.web #layout { max-width: 680px; margin: 22px auto 0; padding: 0 10px 34px; position: relative; z-index: 2; }
 body.web .card-transcriber {
-  margin-top: 0; padding: 22px; border-radius: 24px; border: 1px solid #E2E8D6;
-  box-shadow: 0 22px 48px rgba(15,70,38,.16), 0 3px 8px rgba(0,0,0,.05);
+  margin-top: 0; padding: 22px; border-radius: 24px; border: 1px solid var(--border-card);
+  box-shadow: 0 22px 48px rgba(var(--shadow-rgb), .16), 0 3px 8px rgba(0,0,0,.05);
 }
 body.web .card-head { min-height: 0; margin-bottom: 12px; }
 body.web label.label-upper {
   display: inline-block; margin: 0; padding: 6px 12px; border-radius: 999px; cursor: text;
-  background: #E8F3EC; color: #147139; font-size: 12.5px; letter-spacing: .12em;
+  background: var(--chip-bg); color: var(--accent); font-size: 12.5px; letter-spacing: .12em;
 }
 
 /* ---- Saisie cyrillique : un vrai champ, grand et lisible ---- */
 body.web textarea#input {
   max-height: none; padding: 14px 16px; min-height: 58px;
-  font: 600 21px/1.5 'Noto Sans', sans-serif; color: #1B1A16;
-  background: #FBFAF4; border: 2px solid #E1E6D3; border-radius: 16px; outline: none;
+  font: 600 21px/1.5 'Noto Sans', sans-serif; color: var(--text-field);
+  background: var(--surface-field); border: 2px solid var(--border-field); border-radius: 16px; outline: none;
   transition: border-color .15s, box-shadow .15s, background .15s;
 }
-body.web textarea#input::placeholder { color: #A9A38F; font-weight: 500; }
-body.web textarea#input:hover { border-color: #C9D6B8; }
-body.web textarea#input:focus { background: #fff; border-color: #1B8E4C; box-shadow: 0 0 0 5px rgba(27,142,76,.16); }
+body.web textarea#input::placeholder { color: var(--placeholder); font-weight: 500; }
+body.web textarea#input:hover { border-color: var(--border-field-hover); }
+body.web textarea#input:focus { background: var(--surface); border-color: var(--brand); box-shadow: 0 0 0 5px rgba(var(--cossack-rgb), .18); }
 
 body.web .misal-hint {
   margin-top: 12px; padding: 8px 14px; border-radius: 999px; font-size: 13px;
-  background: #fff; border: 1.5px dashed #BFD2B5; color: #3E6E4D;
+  background: var(--surface); border: 1.5px dashed var(--border-field-hover); color: var(--accent);
 }
-body.web .misal-hint:hover { background: #EAF4ED; border-style: solid; color: #147139; }
+body.web .misal-hint:hover { background: var(--chip-bg); border-style: solid; color: var(--accent-deep); }
 
-/* ---- Résultat : panneau vert bien visible ---- */
+/* ---- Résultat : panneau olive clair ---- */
 body.web .out-divider { display: none; }
 body.web .out-panel {
   margin-top: 0; padding: 14px 18px 16px; border-radius: 18px;
-  background: linear-gradient(160deg, #EAF6EE 0%, #DCEFE3 100%);
-  border: 1.5px solid #BFDFCB;
+  background: linear-gradient(160deg, var(--result-bg-top) 0%, var(--result-bg-bottom) 100%);
+  border: 1.5px solid var(--accent-border);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
 }
 body.web .out-head { margin-bottom: 8px; }
-body.web .out-head .lat { font-size: 13px; color: #147139; letter-spacing: .14em; }
-body.web #output { max-height: none; overflow-y: visible; font: 700 clamp(20px, 5vw, 25px)/1.5 'Noto Sans', sans-serif; color: #147139; }
+body.web .out-head .lat { font-size: 13px; color: var(--accent); letter-spacing: .14em; }
+body.web #output { max-height: none; overflow-y: visible; font: 700 clamp(20px, 5vw, 25px)/1.5 'Noto Sans', sans-serif; color: var(--accent-strong); }
 body.web .out-actions { gap: 8px; }
 body.web .out-panel .btn-copy {
   padding: 8px 14px; border-radius: 999px; font-size: 13px; font-weight: 700;
-  border: 1.5px solid #BFDFCB; background: rgba(255,255,255,.75); color: #2D6B47;
+  border: 1.5px solid var(--accent-border); background: rgba(255,255,255,.75); color: var(--accent);
   transition: background .15s, color .15s, transform .08s, box-shadow .15s;
 }
-body.web .out-panel .btn-copy:hover { background: #fff; color: #147139; }
+body.web .out-panel .btn-copy:hover { background: var(--surface); color: var(--brand); }
 body.web .out-panel #btnCopy {
-  background: linear-gradient(160deg, #4A9B70, #2E7550); color: #fff; border-color: transparent;
-  box-shadow: 0 6px 14px rgba(46,117,80,.26);
+  background: linear-gradient(160deg, var(--brand-light), var(--brand-dark)); color: var(--on-brand); border-color: transparent;
+  box-shadow: 0 6px 14px rgba(var(--cossack-rgb), .30);
 }
-body.web .out-panel #btnCopy:hover { filter: brightness(1.07); color: #fff; }
+body.web .out-panel #btnCopy:hover { filter: brightness(1.07); color: var(--on-brand); }
 body.web .out-panel .btn-copy:active { transform: scale(.96); }
-body.web .out-panel #btnCopy.done { background: #2E7550; }
+body.web .out-panel #btnCopy.done { background: var(--brand-dark); }
 
 /* ---- Palette : touches en relief ---- */
-body.web .alpha-block { margin-top: 18px; padding-top: 16px; border-top: 1.5px dashed #D9DDCB; }
+body.web .alpha-block { margin-top: 18px; padding-top: 16px; border-top: 1.5px dashed var(--border-dash); }
 body.web .alpha-toggle {
-  padding: 10px 14px; border-radius: 14px; background: #F3F0E4; color: #5E5A49; font-size: 13.5px;
+  padding: 10px 14px; border-radius: 14px; background: var(--toggle-bg); color: var(--accent); font-size: 13.5px;
   transition: background .15s, color .15s;
 }
-body.web .alpha-toggle:hover { background: #E8F3EC; color: #147139; }
+body.web .alpha-toggle:hover { background: var(--accent-tint); color: var(--brand); }
 body.web .alpha-toggle .alpha-glyph { font-size: 18px; width: 22px; }
 body.web .alpha-body { margin-top: 12px; }
-body.web .alpha-field { border: 2px solid #E1E6D3; background: #FBFAF4; border-radius: 16px; padding: 10px 12px; }
-body.web textarea#latInput { font-size: 19px; font-weight: 600; color: #147139; min-height: 52px; }
+body.web .alpha-field { border: 2px solid var(--border-field); background: var(--surface-field); border-radius: 16px; padding: 10px 12px; }
+body.web textarea#latInput { font-size: 19px; font-weight: 600; color: var(--accent-strong); min-height: 52px; }
 body.web .alpha-field-actions .btn-copy { font-weight: 700; }
 body.web .alpha-shift { height: 34px; min-width: 40px; border-radius: 10px; border-width: 1.5px; font-size: 17px; }
 body.web .alpha-keys { grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 8px; margin-top: 14px; }
 body.web .alpha-key {
   height: 48px; border-radius: 13px; font-size: 19px; font-weight: 700;
-  background: linear-gradient(180deg, #FFFFFF, #F7F4EA); border: 1px solid #E3DDC9;
-  box-shadow: 0 3px 0 #DDD6C0, 0 6px 10px rgba(60,50,20,.06); color: #24221B;
+  background: linear-gradient(180deg, var(--key-top), var(--key-bottom)); border: 1px solid var(--key-border);
+  box-shadow: 0 3px 0 var(--key-edge), 0 6px 10px rgba(var(--shadow-rgb), .08); color: var(--text);
   transition: transform .06s, box-shadow .06s, background .12s, color .12s, border-color .12s;
 }
 body.web .alpha-key.sp {
-  background: linear-gradient(180deg, #F4FBF6, #E1F1E7); border-color: #B9DCC6; color: #0B5A30;
-  box-shadow: 0 3px 0 #A9D0B7, 0 6px 10px rgba(20,100,55,.10);
+  background: linear-gradient(180deg, var(--key-sp-top), var(--key-sp-bottom)); border-color: var(--key-sp-border); color: var(--accent-deep);
+  box-shadow: 0 3px 0 var(--key-sp-edge), 0 6px 10px rgba(var(--shadow-rgb), .12);
 }
-body.web .alpha-key:hover { transform: translateY(-1px); border-color: #7FC59A; color: #147139; }
-body.web .alpha-key:active { transform: translateY(2px); box-shadow: 0 1px 0 #B8CFC0; }
-body.web .alpha-sep { margin: 4px 0; background: #E4E0D0; }
+body.web .alpha-key:hover { transform: translateY(-1px); border-color: var(--key-hover-border); color: var(--brand); }
+body.web .alpha-key:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--key-edge); }
+body.web .alpha-sep { margin: 4px 0; background: var(--border-card); }
 
 /* ---- Bas de page ---- */
 .web-note {
   display: flex; align-items: center; justify-content: center; gap: 8px; text-align: center;
   margin: 22px auto 8px; padding: 9px 16px; max-width: 520px; border-radius: 999px;
-  background: rgba(255,255,255,.7); border: 1px solid #E2E8D6;
-  font: 600 13px/1.45 'Hanken Grotesk', 'Noto Sans', sans-serif; color: #3E6E4D;
+  background: rgba(255,255,255,.7); border: 1px solid var(--border-field);
+  font: 600 13px/1.45 'Hanken Grotesk', 'Noto Sans', sans-serif; color: var(--accent);
 }
 .web-note[hidden] { display: none; }
 #privacyLink { white-space: nowrap; }
-.web-note-title { font-weight: 800; color: #147139; letter-spacing: .02em; }
-.web-lock { flex: none; color: #1B8E4C; }
+.web-note-title { font-weight: 800; color: var(--brand); letter-spacing: .02em; }
+.web-lock { flex: none; color: var(--brand); }
+/* note sur les boutons « Signaler » : plus bas sous la carte (marge du haut) pour ne pas coller à son ombre */
 .web-note-small {
-  display: block; margin: 0 auto 6px; padding: 0 12px; background: none; border: none; border-radius: 0;
-  font-size: 12.5px; font-weight: 500; color: #8E8872; max-width: 560px;
+  display: block; margin: 40px auto 6px; padding: 0 12px; background: none; border: none; border-radius: 0;
+  font-size: 12.5px; font-weight: 500; color: var(--text-soft); max-width: 560px;
 }
 .web-foot {
-  text-align: center; margin: 14px 8px 0; font: 500 13px/1.9 'Hanken Grotesk', 'Noto Sans', sans-serif; color: #8E8872;
+  text-align: center; margin: 14px 8px 0; font: 500 13px/1.9 'Hanken Grotesk', 'Noto Sans', sans-serif; color: var(--text-soft);
 }
-.web-foot a, .web-link { color: #147139; text-decoration: none; font-weight: 600; }
+.web-foot a, .web-link { color: var(--brand); text-decoration: none; font-weight: 600; }
 .web-link { border: none; background: none; padding: 0; cursor: pointer; font-family: inherit; font-size: inherit; }
 .web-foot a:hover, .web-link:hover { text-decoration: underline; }
-.web-foot a:focus-visible, .web-link:focus-visible, .misal-hint:focus-visible, .btn-copy:focus-visible { outline: 3px solid rgba(27,142,76,.55); outline-offset: 2px; border-radius: 6px; }
+.web-foot a:focus-visible, .web-link:focus-visible, .misal-hint:focus-visible, .btn-copy:focus-visible { outline: 3px solid rgba(var(--cossack-rgb), .55); outline-offset: 2px; border-radius: 6px; }
 
 /* écran assez large : la carte chevauche le bandeau et laisse voir le liseré du drapeau de chaque côté */
 @media (min-width: 720px) {

@@ -13,7 +13,8 @@ const path = require('path');
 const vm = require('vm');
 
 const ROOT = path.resolve(__dirname, '..');
-const DOCS = path.join(ROOT, 'docs');
+// CLS_OUT : dossier de sortie alternatif (aperçus) ; par défaut docs/ (le site publié)
+const DOCS = process.env.CLS_OUT ? path.resolve(process.env.CLS_OUT) : path.join(ROOT, 'docs');
 const EXT = process.argv[2] || 'C:\\Users\\mouss\\OneDrive\\Bureau\\Chechen Latin Script';
 const TOOLS = __dirname;
 

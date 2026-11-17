@@ -1,7 +1,7 @@
 // Petit serveur statique pour tester le site (dossier docs/). Usage : node tests/serve.cjs [port]
 'use strict';
 const http = require('http'), fs = require('fs'), path = require('path');
-const DOCS = path.resolve(__dirname, '..', 'docs');
+const DOCS = process.env.CLS_DOCS ? path.resolve(process.env.CLS_DOCS) : path.resolve(__dirname, '..', 'docs');
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.woff2': 'font/woff2', '.txt': 'text/plain; charset=utf-8' };
 
 function start(port = 8099) {
