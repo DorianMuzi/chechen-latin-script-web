@@ -39,6 +39,11 @@
     es: 'Los botones «Reportar» abren una página de Google Forms en una pestaña nueva, rellenada con tu texto y su resultado. Tú decides si la envías.',
     ar: 'تفتح أزرار «إبلاغ» صفحة Google Forms في علامة تبويب جديدة، معبأة بنصك ونتيجته. أنت من يقرر إرسالها أم لا.'
   };
+  // Lien « Confidentialité » du pied de page (vers la politique publiée). ce fourni par l'utilisateur ; autres langues : non relues.
+  var PRIVACY_LINK = {
+    ce: 'Q̇aylaxa laror', en: 'Privacy', fr: 'Confidentialité', ru: 'Конфиденциальность',
+    de: 'Datenschutz', tr: 'Gizlilik', es: 'Privacidad', ar: 'الخصوصية'
+  };
   // Titre court au-dessus de la phrase de confidentialité (tchétchène uniquement, fourni par l'utilisateur)
   var PRIVACY_TITLE = { ce: 'Q̇aylaxa laror' };
 // Variante quand le compteur de visites est activé (tools/config.json) : même idée, avec la mention du compteur anonyme.
@@ -62,7 +67,7 @@
 
   var el = {};
   ['input', 'lblCyr', 'lblLat', 'lblMisal', 'lblCopy', 'misalHint', 'outBlock', 'output', 'btnCopy', 'sub', 'privacy',
-   'verFoot', 'lblLicense', 'lblContact', 'aboutLicense', 'aboutContact',
+   'verFoot', 'lblLicense', 'lblContact', 'aboutLicense', 'aboutContact', 'privacyLink',
    'btnReport', 'lblReport', 'btnReportProblem', 'reportNote',
    'langBtn', 'langMenu', 'langFlag', 'langCode',
    'alphaToggle', 'lblAlpha', 'alphaBody', 'latInput', 'alphaKeys', 'alphaShift', 'alphaClear', 'alphaCopy', 'lblAlphaCopy'
@@ -123,6 +128,7 @@
     el.verFoot.title = 'engine ' + (window.CLS_ENGINE_VERSION || '');
     el.lblLicense.textContent = t.aboutLicense;
     el.lblContact.textContent = t.aboutContact;
+    el.privacyLink.textContent = PRIVACY_LINK[state.lang] || PRIVACY_LINK.en;
     updateLangUI(state.lang);
     refreshAlphabet();
   }

@@ -607,6 +607,7 @@ body.web .alpha-sep { margin: 4px 0; background: #E4E0D0; }
   font: 600 13px/1.45 'Hanken Grotesk', 'Noto Sans', sans-serif; color: #3E6E4D;
 }
 .web-note[hidden] { display: none; }
+#privacyLink { white-space: nowrap; }
 .web-note-title { font-weight: 800; color: #147139; letter-spacing: .02em; }
 .web-lock { flex: none; color: #1B8E4C; }
 .web-note-small {
