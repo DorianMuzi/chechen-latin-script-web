@@ -471,7 +471,7 @@ body.web {
   width: auto; max-width: none; min-height: 100vh; margin: 0; padding: 0;
   background:
     radial-gradient(900px 420px at 85% 110px, rgba(27,142,76,.10), rgba(27,142,76,0) 70%),
-    radial-gradient(700px 380px at 5% 520px, rgba(217,37,29,.05), rgba(217,37,29,0) 70%),
+    radial-gradient(700px 380px at 5% 520px, rgba(176,84,72,.04), rgba(176,84,72,0) 70%),
     #F1EDE0;
 }
 
@@ -479,7 +479,7 @@ body.web {
 body.web .banner {
   display: block; position: relative; border-radius: 0; padding: 0;
   background:
-    radial-gradient(520px 260px at 92% -20%, rgba(35,168,94,.30), rgba(35,168,94,0) 70%),
+    radial-gradient(520px 260px at 92% -20%, rgba(90,150,112,.24), rgba(90,150,112,0) 70%),
     radial-gradient(420px 220px at 6% 120%, rgba(255,255,255,.75), rgba(255,255,255,0) 70%),
     #E4ECD6;
   color: #1A1A14;
@@ -491,14 +491,14 @@ body.web .banner {
 .hero-deco .c2 { width: 190px; height: 190px; left: 34%; bottom: -120px; border: 2px solid rgba(27,142,76,.12); }
 .hero-inner { position: relative; max-width: 680px; margin: 0 auto; padding: 18px 14px 34px; }
 .banner-row { display: flex; align-items: center; gap: 10px; }
-body.web .banner img { width: 58px; height: 58px; padding: 0; border-radius: 0; background: none; box-shadow: none; mix-blend-mode: multiply; }
+body.web .banner img { width: 58px; height: 58px; padding: 0; border-radius: 0; background: none; box-shadow: none;  }
 body.web .banner .name-cap { color: #1A1A14; font-size: clamp(19px, 5.2vw, 27px); letter-spacing: .09em; }
 body.web .banner .name-script { color: #147139; font-size: clamp(26px, 7vw, 40px); }
 body.web .subtitle {
   margin: 14px 2px 0; text-align: start; color: #4E5A44;
   font: 600 clamp(14px, 3.6vw, 17px)/1.4 'Hanken Grotesk', 'Noto Sans', sans-serif; letter-spacing: .01em;
 }
-.flag-stripe { position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: linear-gradient(180deg, #FFFFFF 0 22%, #D9251D 22% 78%, #FFFFFF 78% 100%); box-shadow: 0 -1px 0 rgba(0,0,0,.08); }
+.flag-stripe { position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: linear-gradient(180deg, #FFFFFF 0 22%, #B8574D 22% 78%, #FFFFFF 78% 100%); box-shadow: 0 -1px 0 rgba(0,0,0,.08); }
 body.web .lang-btn { height: 34px; padding: 0 10px 0 8px; box-shadow: 0 3px 10px rgba(40,70,30,.14); background: rgba(255,255,255,.92); border-color: rgba(0,0,0,.08); }
 body.web .lang-btn .flag { width: 24px; height: 16px; }
 body.web .lang-btn:hover, body.web .lang-btn[aria-expanded="true"] { background: #E8F3EC; color: #1B8E4C; border-color: #BFE3CC; }
@@ -552,12 +552,12 @@ body.web .out-panel .btn-copy {
 }
 body.web .out-panel .btn-copy:hover { background: #fff; color: #147139; }
 body.web .out-panel #btnCopy {
-  background: linear-gradient(160deg, #23A85E, #147139); color: #fff; border-color: transparent;
-  box-shadow: 0 6px 14px rgba(19,122,64,.34);
+  background: linear-gradient(160deg, #4A9B70, #2E7550); color: #fff; border-color: transparent;
+  box-shadow: 0 6px 14px rgba(46,117,80,.26);
 }
 body.web .out-panel #btnCopy:hover { filter: brightness(1.07); color: #fff; }
 body.web .out-panel .btn-copy:active { transform: scale(.96); }
-body.web .out-panel #btnCopy.done { background: #147139; }
+body.web .out-panel #btnCopy.done { background: #2E7550; }
 
 /* ---- Palette : touches en relief ---- */
 body.web .alpha-block { margin-top: 18px; padding-top: 16px; border-top: 1.5px dashed #D9DDCB; }
