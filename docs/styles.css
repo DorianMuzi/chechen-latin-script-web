@@ -502,7 +502,8 @@
   --text: #1A1A14;
   --text-field: #1B1A16;
   --text-soft: #66664A;
-  --text-subtitle: #58771E;
+  --banner-script: #226A0D;   /* « Latin Script » sur le jaune : vert foncé (contraste ~5,8 ; le Cossack Green pur se fondait dans le jaune) */
+  --text-subtitle: #3F5715;   /* sous-titre sur le jaune : olive foncé (contraste ~7,6) */
   --placeholder: #8A8C62;
   --on-brand: #FFFFFF;
 
@@ -571,7 +572,7 @@ body.web .banner {
 .banner-row { display: flex; align-items: center; gap: 10px; }
 body.web .banner img { width: 58px; height: 58px; padding: 0; border-radius: 0; background: none; box-shadow: none;  }
 body.web .banner .name-cap { color: var(--text); font-size: clamp(19px, 5.2vw, 27px); letter-spacing: .09em; }
-body.web .banner .name-script { color: var(--brand); font-size: clamp(26px, 7vw, 40px); }
+body.web .banner .name-script { color: var(--banner-script); font-size: clamp(26px, 7vw, 40px); }
 body.web .subtitle {
   margin: 14px 2px 0; text-align: start; color: var(--text-subtitle);
   font: 600 clamp(14px, 3.6vw, 17px)/1.4 'Hanken Grotesk', 'Noto Sans', sans-serif; letter-spacing: .01em;
@@ -591,7 +592,7 @@ body.web .card-transcriber {
 body.web .card-head { min-height: 0; margin-bottom: 12px; }
 body.web label.label-upper {
   display: inline-block; margin: 0; padding: 6px 12px; border-radius: 999px; cursor: text;
-  background: var(--chip-bg); color: var(--accent); font-size: 12.5px; letter-spacing: .12em;
+  background: var(--chip-bg); color: var(--accent-deep); font-size: 12.5px; letter-spacing: .12em;
 }
 
 /* ---- Saisie cyrillique : un vrai champ, grand et lisible ---- */
