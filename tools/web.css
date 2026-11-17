@@ -24,15 +24,16 @@
   --banner-bg: var(--sulphur-yellow);
   --text: #1A1A14;
   --text-field: #1B1A16;
-  --text-soft: #8A8A66;
+  --text-soft: #66664A;
   --text-subtitle: #58771E;
-  --placeholder: #A8AA82;
+  --placeholder: #8A8C62;
   --on-brand: #FFFFFF;
 
   /* couleur principale (boutons, focus, liens) */
   --brand: var(--cossack-green);
-  --brand-light: #3E9E1E;
+  --brand-light: #2B8511;
   --brand-dark: #2A7A10;
+  --link: #28720F; /* vert un peu plus foncé pour le PETIT texte des liens (contraste >= 4,5 sur le crème) */
 
   /* accent olive (texte du résultat, étiquettes, touches spéciales) */
   --accent: var(--olive-green);
@@ -142,7 +143,7 @@ body.web .out-panel {
   box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
 }
 body.web .out-head { margin-bottom: 8px; }
-body.web .out-head .lat { font-size: 13px; color: var(--accent); letter-spacing: .14em; }
+body.web .out-head .lat { font-size: 13px; color: var(--accent-strong); letter-spacing: .14em; }
 body.web #output { max-height: none; overflow-y: visible; font: 700 clamp(20px, 5vw, 25px)/1.5 'Noto Sans', sans-serif; color: var(--accent-strong); }
 body.web .out-actions { gap: 8px; }
 body.web .out-panel .btn-copy {
@@ -196,7 +197,7 @@ body.web .alpha-sep { margin: 4px 0; background: var(--border-card); }
 }
 .web-note[hidden] { display: none; }
 #privacyLink { white-space: nowrap; }
-.web-note-title { font-weight: 800; color: var(--brand); letter-spacing: .02em; }
+.web-note-title { font-weight: 800; color: var(--link); letter-spacing: .02em; }
 .web-lock { flex: none; color: var(--brand); }
 /* note sur les boutons « Signaler » : plus bas sous la carte (marge du haut) pour ne pas coller à son ombre */
 .web-note-small {
@@ -206,7 +207,7 @@ body.web .alpha-sep { margin: 4px 0; background: var(--border-card); }
 .web-foot {
   text-align: center; margin: 14px 8px 0; font: 500 13px/1.9 'Hanken Grotesk', 'Noto Sans', sans-serif; color: var(--text-soft);
 }
-.web-foot a, .web-link { color: var(--brand); text-decoration: none; font-weight: 600; }
+.web-foot a, .web-link { color: var(--link); text-decoration: none; font-weight: 600; }
 .web-link { border: none; background: none; padding: 0; cursor: pointer; font-family: inherit; font-size: inherit; }
 .web-foot a:hover, .web-link:hover { text-decoration: underline; }
 .web-foot a:focus-visible, .web-link:focus-visible, .misal-hint:focus-visible, .btn-copy:focus-visible { outline: 3px solid rgba(var(--cossack-rgb), .55); outline-offset: 2px; border-radius: 6px; }
