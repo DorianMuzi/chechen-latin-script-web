@@ -120,7 +120,7 @@ const ck = (name, cond, extra) => { if (cond) { ok++; L('  OK   ' + name); } els
     L('== 3. Palette de lettres latines');
     const open0 = await ev(s, "document.getElementById('alphaBody').hidden");
     ck('palette ouverte par défaut sur grand écran', open0 === false);
-    ck('41 touches', (await ev(s, "document.querySelectorAll('.alpha-key').length")) === 41);
+    ck('42 touches', (await ev(s, "document.querySelectorAll('.alpha-key').length")) === 42);
     await click(s, '.alpha-key[data-idx="0"]'); await click(s, '#alphaShift'); await click(s, '.alpha-key[data-idx="16"]'); await click(s, '.alpha-key[data-idx="14"]');
     ck('clics : ä, puis A (majuscule à usage unique), puis ŋ', (await val(s, 'latInput')) === 'äAŋ', JSON.stringify(await val(s, 'latInput')));
     ck('infobulle de ŋ = texte de la langue de la page', (await ev(s, "(()=>{const l=document.documentElement.lang;return document.querySelectorAll('.alpha-key')[14].title===window.CLS_I18N.T[l].alphaEng})()")) === true);
