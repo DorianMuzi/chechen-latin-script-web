@@ -303,6 +303,8 @@
     /* ---- Mode panneau latéral : même page, largeur libre ---- */
     html.panel body { width: auto; min-width: 0; padding: 14px; }
     html.panel .btn-expand { display: none; }
+    /* panneau : les enveloppes de la saisie disparaissent pour que la saisie et le résultat se partagent la hauteur de la carte */
+    html.panel .in-wrap, html.panel .in-main { display: contents; }
 
     /* ---- Panneau : réglages en haut, saisie en dessous (elle occupe toute la hauteur restante) ---- */
     html.panel body { min-height: 100vh; }
@@ -437,7 +439,17 @@
       flex: none;
       transition: background .2s, color .2s, border-color .2s;
     }
+    /* Bouton « Agrandir » : barre verticale qui épouse la hauteur de la zone de saisie (grande surface de clic) */
+    .in-wrap { display: flex; align-items: stretch; gap: 10px; }
+    .in-main { flex: 1; min-width: 0; }
+    .btn-expand {
+      width: 32px; height: auto; min-height: 60px; align-self: stretch; border-radius: 16px;
+      background: #F6F3EA; border: 1px solid #E8E2D2; color: #7E9A82;
+    }
+    .btn-expand:hover { background: #E8F3EC; border-color: #BFE3CC; }
     .btn-expand[hidden] { display: none; }
+    /* panneau latéral déjà ouvert : le bouton devient « Réduire » (chevron retourné) */
+    .btn-expand.reduce svg { transform: rotate(180deg); }
     .btn-expand:hover { color: #1B8E4C; }
     .btn-expand svg { transition: transform .25s; }
     /* Texte volumineux : on attire l'attention sur la bascule */

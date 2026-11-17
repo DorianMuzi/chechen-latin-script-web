@@ -1,5 +1,5 @@
 /* Généré par tools/build.cjs. Met le site en cache pour qu'il fonctionne hors ligne. */
-const CACHE = "cls-web-b5a3eb700e";
+const CACHE = "cls-web-2619a24bd5";
 const FILES = [
   "./",
   "LICENSE",
@@ -31,6 +31,7 @@ const FILES = [
   "fonts/notosans-500-cyrillic.woff2",
   "fonts/notosans-500-latin-ext.woff2",
   "fonts/notosans-500-latin.woff2",
+  "fonts/notosans-dot.woff2",
   "i18n.js",
   "icons/apple-touch-icon.png",
   "icons/icon-192.png",
