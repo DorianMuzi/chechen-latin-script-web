@@ -39,10 +39,12 @@
     es: 'Los botones «Reportar» abren una página de Google Forms en una pestaña nueva, rellenada con tu texto y su resultado. Tú decides si la envías.',
     ar: 'تفتح أزرار «إبلاغ» صفحة Google Forms في علامة تبويب جديدة، معبأة بنصك ونتيجته. أنت من يقرر إرسالها أم لا.'
   };
+  // Titre court au-dessus de la phrase de confidentialité (tchétchène uniquement, fourni par l'utilisateur)
+  var PRIVACY_TITLE = { ce: 'Q̇aylaxa laror' };
 // Variante quand le compteur de visites est activé (tools/config.json) : même idée, avec la mention du compteur anonyme.
   // ce : PROVISOIRE (anglais) en attendant la formulation tchétchène.
   var PRIVACY_STATS = {
-    ce: 'Everything is converted in your browser: your text is never sent anywhere. Only visits are counted, anonymously (country, no cookies, no personal data).',
+    ce: 'Derrig a şuŋ brauzerax doliyra du: şuŋ tekst cq̇a a djaẋaƶiyna yac. Ẋaƶarş beŋ ca loru, anonimno (moxk, cookie a, şeŋ dolaẋ xaamaş a bocuş).',
     en: 'Everything is converted in your browser: your text is never sent anywhere. Only visits are counted, anonymously (country, no cookies, no personal data).',
     fr: 'Tout est converti dans votre navigateur : votre texte n’est jamais envoyé. Seules les visites sont comptées, de façon anonyme (pays, sans cookie ni donnée personnelle).',
     ru: 'Всё преобразуется в вашем браузере: ваш текст никуда не отправляется. Анонимно подсчитываются только посещения (страна, без файлов cookie и персональных данных).',
@@ -102,7 +104,17 @@
     el.alphaClear.setAttribute('aria-label', t.alphaClear);
     el.lblAlphaCopy.textContent = t.copy;
     var privacy = STATS_CODE ? PRIVACY_STATS : PRIVACY;
-    el.privacy.textContent = privacy[state.lang] || privacy.en;
+    // Tchétchène : titre court (« Confidentialité ») au-dessus de la phrase
+    var ptitle = STATS_CODE ? PRIVACY_TITLE[state.lang] : '';
+    el.privacy.textContent = '';
+    if (ptitle) {
+      var strong = document.createElement('strong');
+      strong.className = 'web-note-title';
+      strong.textContent = ptitle;
+      el.privacy.appendChild(strong);
+      el.privacy.appendChild(document.createElement('br'));
+    }
+    el.privacy.appendChild(document.createTextNode(privacy[state.lang] || privacy.en));
     el.reportNote.textContent = REPORT_NOTE[state.lang] || REPORT_NOTE.en;
     el.lblReport.textContent = t.report;
     el.btnReportProblem.textContent = t.reportProblem;

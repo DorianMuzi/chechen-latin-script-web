@@ -127,7 +127,7 @@
     }
 
     .label-upper {
-      font: 600 11px/1 'Hanken Grotesk', sans-serif;
+      font: 600 12px/1 'Hanken Grotesk', sans-serif;
       letter-spacing: .10em;
       text-transform: uppercase;
       color: #A39C8B;
@@ -172,7 +172,7 @@
       border-radius: 10px;
       padding: 7px 12px;
       cursor: pointer;
-      font: 600 12px 'Hanken Grotesk', sans-serif;
+      font: 600 13px 'Hanken Grotesk', sans-serif;
       color: #9A947F;
       display: inline-flex;
       align-items: center;
@@ -194,12 +194,12 @@
       display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px;
     }
     .out-head .lat {
-      font: 600 11px/1 'Hanken Grotesk', sans-serif;
+      font: 600 12px/1 'Hanken Grotesk', sans-serif;
       letter-spacing: .10em; text-transform: uppercase; color: #1B8E4C;
     }
     .btn-copy {
       border: none; background: transparent; cursor: pointer;
-      font: 600 12px 'Hanken Grotesk', sans-serif; color: #9A947F;
+      font: 600 13px 'Hanken Grotesk', sans-serif; color: #9A947F;
       display: flex; align-items: center; gap: 4px;
       transition: color .2s;
     }
@@ -207,14 +207,14 @@
     .out-actions { display: flex; align-items: center; gap: 14px; }
     .about-meta { margin: 12px 0 0; padding: 0; display: grid; gap: 6px; }
     .about-meta > div { display: flex; align-items: baseline; gap: 10px; }
-    .about-meta dt { margin: 0; flex: 0 0 74px; font: 600 12px 'Hanken Grotesk', sans-serif; color: #9A947F; }
+    .about-meta dt { margin: 0; flex: 0 0 74px; font: 600 13px 'Hanken Grotesk', sans-serif; color: #9A947F; }
     .about-meta dd { margin: 0; min-width: 0; overflow-wrap: anywhere; font: 500 12.5px 'Noto Sans', sans-serif; color: #211F1B; }
     .about-meta a { color: #1B8E4C; text-decoration: none; }
     .about-meta a:hover { text-decoration: underline; }
     .about-meta a:focus-visible { outline: 2px solid #1B8E4C; outline-offset: 2px; border-radius: 3px; }
     .report-link {
       margin-top: 12px; border: 1px solid #EFEADF; background: #F4F1E9; border-radius: 10px; padding: 7px 12px;
-      cursor: pointer; font: 600 12px 'Hanken Grotesk', sans-serif; color: #1B8E4C;
+      cursor: pointer; font: 600 13px 'Hanken Grotesk', sans-serif; color: #1B8E4C;
       transition: border-color .2s, background .2s;
     }
     .report-link:hover { border-color: #BFE3CC; background: #E8F3EC; }
@@ -266,7 +266,7 @@
       height: 28px; padding: 0 7px 0 6px; border-radius: 14px;
       border: 1px solid rgba(0,0,0,.10); background: rgba(255,255,255,.88);
       color: #4A463C; cursor: pointer;
-      font: 700 12px/1 'Hanken Grotesk', sans-serif; letter-spacing: .04em;
+      font: 700 13px/1 'Hanken Grotesk', sans-serif; letter-spacing: .04em;
       box-shadow: 0 1px 3px rgba(0,0,0,.08);
       transition: background .2s, color .2s, border-color .2s;
     }
@@ -291,7 +291,7 @@
     .lang-item:focus-visible { outline: 2px solid #1B8E4C; outline-offset: -2px; }
     .lang-item[aria-checked="true"] { background: #E8F3EC; color: #147139; }
     .lang-item .lang-name { flex: 1; }
-    .lang-item .lang-code { font-size: 11px; letter-spacing: .08em; color: #857F70; }
+    .lang-item .lang-code { font-size: 12px; letter-spacing: .08em; color: #857F70; }
     .lang-item .lang-check { width: 16px; height: 16px; flex: none; color: #1B8E4C; opacity: 0; }
     .lang-item[aria-checked="true"] .lang-check { opacity: 1; }
 
@@ -329,7 +329,7 @@
     .alpha-toggle {
       width: 100%; display: flex; align-items: center; gap: 8px; padding: 4px 0;
       border: none; background: transparent; cursor: pointer; text-align: start;
-      font: 600 12px 'Hanken Grotesk', sans-serif; color: #9A947F; transition: color .2s;
+      font: 600 13px 'Hanken Grotesk', sans-serif; color: #9A947F; transition: color .2s;
     }
     .alpha-toggle:hover { color: #1B8E4C; }
     .alpha-toggle:focus-visible { outline: 2px solid #1B8E4C; outline-offset: 2px; border-radius: 6px; }
@@ -417,7 +417,7 @@
 
     .version {
       text-align: center;
-      font: 500 12px 'Hanken Grotesk', sans-serif;
+      font: 500 13px 'Hanken Grotesk', sans-serif;
       color: #A8A294;
       margin-top: 15px;
     }
@@ -525,7 +525,7 @@ body.web .card-transcriber {
 body.web .card-head { min-height: 0; margin-bottom: 12px; }
 body.web label.label-upper {
   display: inline-block; margin: 0; padding: 6px 12px; border-radius: 999px; cursor: text;
-  background: #E8F3EC; color: #147139; font-size: 11.5px; letter-spacing: .12em;
+  background: #E8F3EC; color: #147139; font-size: 12.5px; letter-spacing: .12em;
 }
 
 /* ---- Saisie cyrillique : un vrai champ, grand et lisible ---- */
@@ -554,7 +554,7 @@ body.web .out-panel {
   box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
 }
 body.web .out-head { margin-bottom: 8px; }
-body.web .out-head .lat { font-size: 12px; color: #147139; letter-spacing: .14em; }
+body.web .out-head .lat { font-size: 13px; color: #147139; letter-spacing: .14em; }
 body.web #output { max-height: none; overflow-y: visible; font: 700 clamp(20px, 5vw, 25px)/1.5 'Noto Sans', sans-serif; color: #147139; }
 body.web .out-actions { gap: 8px; }
 body.web .out-panel .btn-copy {
@@ -606,13 +606,14 @@ body.web .alpha-sep { margin: 4px 0; background: #E4E0D0; }
   background: rgba(255,255,255,.7); border: 1px solid #E2E8D6;
   font: 600 13px/1.45 'Hanken Grotesk', 'Noto Sans', sans-serif; color: #3E6E4D;
 }
+.web-note-title { font-weight: 800; color: #147139; letter-spacing: .02em; }
 .web-lock { flex: none; color: #1B8E4C; }
 .web-note-small {
   display: block; margin: 0 auto 6px; padding: 0 12px; background: none; border: none; border-radius: 0;
-  font-size: 11.5px; font-weight: 500; color: #8E8872; max-width: 560px;
+  font-size: 12.5px; font-weight: 500; color: #8E8872; max-width: 560px;
 }
 .web-foot {
-  text-align: center; margin: 14px 8px 0; font: 500 12.5px/1.9 'Hanken Grotesk', 'Noto Sans', sans-serif; color: #8E8872;
+  text-align: center; margin: 14px 8px 0; font: 500 13px/1.9 'Hanken Grotesk', 'Noto Sans', sans-serif; color: #8E8872;
 }
 .web-foot a, .web-link { color: #147139; text-decoration: none; font-weight: 600; }
 .web-link { border: none; background: none; padding: 0; cursor: pointer; font-family: inherit; font-size: inherit; }
