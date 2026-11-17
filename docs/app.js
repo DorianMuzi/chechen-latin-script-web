@@ -301,7 +301,8 @@
       var tipText = (item.tip && (T[state.lang] || {})[item.tip]) || item.cyr;
       b.textContent = c;
       b.title = tipText;
-      b.setAttribute('aria-label', c + ' — ' + tipText);
+      // une infobulle qui commence déjà par « lettre — » (touche w) ne répète pas la lettre
+    b.setAttribute('aria-label', tipText.indexOf(item.ch + ' — ') === 0 ? c + tipText.slice(item.ch.length) : c + ' — ' + tipText);
     });
   }
 
