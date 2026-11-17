@@ -517,6 +517,7 @@
   --eugenia-red: #ED3D66;
   --olive-green: #58771E;
   --cossack-green: #328E13;
+  --deep-indigo: #07157E;     /* Deep Indigo C95 M85 Y10 K45 (CMYK -> RVB sans profil d'impression) : titre du bandeau */
   --cossack-rgb: 50, 142, 19;
   --olive-rgb: 88, 119, 30;
   --eugenia-rgb: 237, 61, 102;
@@ -529,7 +530,7 @@
   --text: #1A1A14;
   --text-field: #1B1A16;
   --text-soft: #66664A;
-  --banner-script: #226A0D;   /* « Latin Script » sur le jaune : vert foncé (contraste ~5,8 ; le Cossack Green pur se fondait dans le jaune) */
+  --banner-title: var(--deep-indigo);   /* « CHECHEN » et « Latin Script » sur le jaune (contraste très élevé) */
   --text-subtitle: #3F5715;   /* sous-titre sur le jaune : olive foncé (contraste ~7,6) */
   --placeholder: #8A8C62;
   --on-brand: #FFFFFF;
@@ -598,8 +599,8 @@ body.web .banner {
 .hero-inner { position: relative; max-width: 680px; margin: 0 auto; padding: 18px 14px 34px; }
 .banner-row { display: flex; align-items: center; gap: 10px; }
 body.web .banner img { width: 58px; height: 58px; padding: 0; border-radius: 0; background: none; box-shadow: none;  }
-body.web .banner .name-cap { color: var(--text); font-size: clamp(19px, 5.2vw, 27px); letter-spacing: .09em; }
-body.web .banner .name-script { color: var(--banner-script); font-size: clamp(26px, 7vw, 40px); }
+body.web .banner .name-cap { color: var(--banner-title); font-size: clamp(19px, 5.2vw, 27px); letter-spacing: .09em; }
+body.web .banner .name-script { color: var(--banner-title); font-size: clamp(26px, 7vw, 40px); }
 body.web .subtitle {
   margin: 14px 2px 0; text-align: start; color: var(--text-subtitle);
   font: 600 clamp(14px, 3.6vw, 17px)/1.4 'Hanken Grotesk', 'Noto Sans', sans-serif; letter-spacing: .01em;
