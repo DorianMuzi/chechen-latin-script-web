@@ -30,7 +30,7 @@
   // Précision sur le bouton « Signaler » (il ouvre une page Google Forms : le texte voyage dans l'adresse de la page).
   // ce : PROVISOIRE (anglais) en attendant la formulation tchétchène.
   var REPORT_NOTE = {
-    ce: 'The “Report” buttons open a Google Forms page in a new tab, pre-filled with your text and its result. You decide whether to submit it.',
+    ce: '« Djayazdaraŋ » ṫeödaraşa kerlaçu qollamaŋ Google Forms aġo yöllu, cigaẋ şuŋ tekst a, cünaŋ ƶamj a ẋalxa djayazdina xülu. Djaẋoƶiyta ya ca ẋoƶiyta şäş xorƶu.',
     en: 'The “Report” buttons open a Google Forms page in a new tab, pre-filled with your text and its result. You decide whether to submit it.',
     fr: 'Les boutons « Signaler » ouvrent une page Google Forms dans un nouvel onglet, préremplie avec votre texte et son résultat. C’est vous qui décidez de l’envoyer.',
     ru: 'Кнопки «Сообщить» открывают страницу Google Forms в новой вкладке с вашим текстом и результатом. Отправлять форму или нет — решаете вы.',
