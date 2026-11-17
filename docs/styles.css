@@ -1,5 +1,32 @@
 /* Généré par tools/build.cjs : style de la popup de l'extension + tools/web.css */
 
+    /* ---- Couleurs : palette du « livre de couleurs » + RÔLES (mêmes noms que le site web) ----
+         Sulphur Yellow C4 M4 Y28 K0 = #F5F5B8 · Eugenia Red C7 M76 Y60 K0 = #ED3D66 · Olive Green C56 M40 Y85 K22 = #58771E ·
+         Cossack Green C76 M32 Y91 K18 = #328E13 (conversion CMYK -> RVB sans profil d'impression).
+         Le reste de la feuille n'utilise que ces rôles : un futur mode sombre = un second jeu de valeurs ici. */
+    :root {
+      --sulphur-yellow: #F5F5B8;
+      --eugenia-red: #ED3D66;
+      --olive-green: #58771E;
+      --cossack-green: #328E13;
+      --cossack-rgb: 50, 142, 19;
+      --banner-bg: #E3EBD3;        /* bandeau : vert clair de l'extension (choix de l'utilisateur) ; calé sur la couleur de la tuile du logo (227,235,211) pour qu'aucun carré ne se voie */
+      --brand: var(--cossack-green);   /* couleur principale : contours de focus, pistes, icônes */
+      --brand-light: #2B8511;       /* début du dégradé des boutons (blanc dessus : contraste >= 4,5) */
+      --brand-dark: #2A7A10;
+      --brand-deep: #226A0D;
+      --link: #28720F;              /* vert un peu plus foncé pour le PETIT texte (contraste >= 4,5) */
+      --accent: var(--olive-green);
+      --accent-strong: #4A6618;
+      --accent-deep: #3F5715;
+      --accent-tint: #EDF2DA;
+      --accent-border: #CBD9A0;
+      --chip-bg: var(--sulphur-yellow);   /* états « sélectionné / actif » */
+      --soft-icon: #7F8F5A;
+      --key-sp-bg: #F2F7DF;
+      --key-sp-border: #D6E2B0;
+      --flag-red: var(--eugenia-red);
+    }
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
 
@@ -17,7 +44,7 @@
     /* ---- Header banner ---- */
     .banner {
       position: relative;
-      background: #E4ECD6;
+      background: var(--banner-bg);
       border-radius: 16px;
       padding: 13px 16px;
       display: flex;
@@ -59,7 +86,7 @@
       border-radius: 50%;
       border: 1px solid rgba(0,0,0,.10);
       background: rgba(255,255,255,.88);
-      color: #7E9A82;
+      color: var(--soft-icon);
       cursor: pointer;
       font: italic 700 13px/1 Georgia, serif;
       display: flex; align-items: center; justify-content: center;
@@ -69,8 +96,8 @@
     }
     /* zone de clic élargie (32 px) sans changer l'apparence du bouton */
     .info-btn::after { content: ""; position: absolute; inset: -3px; }
-    .info-btn:hover { color: #1B8E4C; }
-    .info-btn.active { background: #E8F3EC; color: #1B8E4C; border-color: #BFE3CC; }
+    .info-btn:hover { color: var(--link); }
+    .info-btn.active { background: var(--chip-bg); color: var(--link); border-color: var(--accent-border); }
 
     /* ---- Description block ---- */
     .desc-block {
@@ -179,7 +206,7 @@
       gap: 6px;
       transition: color .2s, border-color .2s;
     }
-    .misal-hint:hover { color: #1B8E4C; border-color: #BFE3CC; }
+    .misal-hint:hover { color: var(--link); border-color: var(--accent-border); }
 
     /* ---- Result block ---- */
     .out-block {
@@ -195,7 +222,7 @@
     }
     .out-head .lat {
       font: 600 12px/1 'Hanken Grotesk', sans-serif;
-      letter-spacing: .10em; text-transform: uppercase; color: #1B8E4C;
+      letter-spacing: .10em; text-transform: uppercase; color: var(--link);
     }
     .btn-copy {
       border: none; background: transparent; cursor: pointer;
@@ -203,27 +230,27 @@
       display: flex; align-items: center; gap: 4px;
       transition: color .2s;
     }
-    .btn-copy:hover { color: #1B8E4C; }
+    .btn-copy:hover { color: var(--link); }
     .out-actions { display: flex; align-items: center; gap: 14px; }
     .about-meta { margin: 12px 0 0; padding: 0; display: grid; gap: 6px; }
     .about-meta > div { display: flex; align-items: baseline; gap: 10px; }
     .about-meta dt { margin: 0; flex: 0 0 74px; font: 600 13px 'Hanken Grotesk', sans-serif; color: #9A947F; }
     .about-meta dd { margin: 0; min-width: 0; overflow-wrap: anywhere; font: 500 12.5px 'Noto Sans', sans-serif; color: #211F1B; }
-    .about-meta a { color: #1B8E4C; text-decoration: none; }
+    .about-meta a { color: var(--link); text-decoration: none; }
     .about-meta a:hover { text-decoration: underline; }
-    .about-meta a:focus-visible { outline: 2px solid #1B8E4C; outline-offset: 2px; border-radius: 3px; }
+    .about-meta a:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 3px; }
     .report-link {
       margin-top: 12px; border: 1px solid #EFEADF; background: #F4F1E9; border-radius: 10px; padding: 7px 12px;
-      cursor: pointer; font: 600 13px 'Hanken Grotesk', sans-serif; color: #1B8E4C;
+      cursor: pointer; font: 600 13px 'Hanken Grotesk', sans-serif; color: var(--link);
       transition: border-color .2s, background .2s;
     }
-    .report-link:hover { border-color: #BFE3CC; background: #E8F3EC; }
+    .report-link:hover { border-color: var(--accent-border); background: var(--accent-tint); }
     .about-actions { display: flex; flex-wrap: wrap; gap: 0 8px; }
     .about-actions .report-link[hidden] { display: none; }
-    .report-link:focus-visible { outline: 2px solid #1B8E4C; outline-offset: 2px; }
+    .report-link:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
     #output {
       font: 500 16px/1.5 'Noto Sans', sans-serif;
-      color: #147139;
+      color: var(--accent-strong);
       min-height: 24px;
       max-height: 200px;
       overflow-y: auto;
@@ -270,11 +297,11 @@
       box-shadow: 0 1px 3px rgba(0,0,0,.08);
       transition: background .2s, color .2s, border-color .2s;
     }
-    .lang-btn:hover, .lang-btn[aria-expanded="true"] { color: #1B8E4C; border-color: #BFE3CC; background: #E8F3EC; }
+    .lang-btn:hover, .lang-btn[aria-expanded="true"] { color: var(--link); border-color: var(--accent-border); background: var(--accent-tint); }
     .lang-btn svg { transition: transform .2s; }
     .lang-btn .flag { width: 20px; height: 14px; }
     .lang-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
-    .lang-btn:focus-visible, .info-btn:focus-visible, .btn-expand:focus-visible { outline: 2px solid #1B8E4C; outline-offset: 2px; }
+    .lang-btn:focus-visible, .info-btn:focus-visible, .btn-expand:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
     .lang-menu {
       position: absolute; top: calc(100% + 8px); inset-inline-end: 0; z-index: 20;
       min-width: 190px; padding: 6px; background: #fff;
@@ -288,11 +315,11 @@
       font: 600 14px/1.2 'Hanken Grotesk', 'Noto Sans', sans-serif; color: #211F1B;
     }
     .lang-item:hover, .lang-item:focus-visible { background: #F4F1E9; }
-    .lang-item:focus-visible { outline: 2px solid #1B8E4C; outline-offset: -2px; }
-    .lang-item[aria-checked="true"] { background: #E8F3EC; color: #147139; }
+    .lang-item:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; }
+    .lang-item[aria-checked="true"] { background: var(--chip-bg); color: var(--brand-deep); }
     .lang-item .lang-name { flex: 1; }
     .lang-item .lang-code { font-size: 12px; letter-spacing: .08em; color: #857F70; }
-    .lang-item .lang-check { width: 16px; height: 16px; flex: none; color: #1B8E4C; opacity: 0; }
+    .lang-item .lang-check { width: 16px; height: 16px; flex: none; color: var(--brand); opacity: 0; }
     .lang-item[aria-checked="true"] .lang-check { opacity: 1; }
 
     /* ---- Bannière étroite (panneau latéral) : le nom s'abrège selon la place réellement disponible ---- */
@@ -331,9 +358,9 @@
       border: none; background: transparent; cursor: pointer; text-align: start;
       font: 600 13px 'Hanken Grotesk', sans-serif; color: #9A947F; transition: color .2s;
     }
-    .alpha-toggle:hover { color: #1B8E4C; }
-    .alpha-toggle:focus-visible { outline: 2px solid #1B8E4C; outline-offset: 2px; border-radius: 6px; }
-    .alpha-toggle .alpha-glyph { font: 600 15px 'Noto Sans', sans-serif; color: #1B8E4C; width: 18px; text-align: center; }
+    .alpha-toggle:hover { color: var(--link); }
+    .alpha-toggle:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 6px; }
+    .alpha-toggle .alpha-glyph { font: 600 15px 'Noto Sans', sans-serif; color: var(--link); width: 18px; text-align: center; }
     .alpha-toggle .alpha-chev { margin-inline-start: auto; transition: transform .2s; }
     .alpha-toggle[aria-expanded="true"] .alpha-chev { transform: rotate(180deg); }
     .alpha-body[hidden] { display: none; }
@@ -341,28 +368,28 @@
     .alpha-field { border: 1px solid #EFEADF; background: #FAF8F2; border-radius: 12px; padding: 8px 10px; }
     textarea#latInput {
       width: 100%; border: none; outline: none; resize: none; background: transparent; display: block;
-      font: 500 16px/1.5 'Noto Sans', sans-serif; color: #147139; min-height: 48px; max-height: 120px;
+      font: 500 16px/1.5 'Noto Sans', sans-serif; color: var(--accent-strong); min-height: 48px; max-height: 120px;
       scrollbar-width: thin; scrollbar-color: #CDC5B2 transparent;
     }
     .alpha-field-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
     .alpha-field-actions .btn-copy { padding: 2px 0; }
-    .alpha-field-actions .btn-copy.done { color: #1B8E4C; }
+    .alpha-field-actions .btn-copy.done { color: var(--link); }
     .alpha-tools { display: flex; align-items: center; gap: 12px; }
     .alpha-shift {
       min-width: 34px; height: 30px; border: 1px solid #E2DCCE; background: #fff; border-radius: 9px; cursor: pointer;
       font: 700 15px 'Noto Sans', sans-serif; color: #5C574B; padding: 0 8px; transition: background .15s, border-color .15s, color .15s;
     }
     .alpha-shift:hover { background: #FAF8F2; }
-    .alpha-shift[aria-pressed="true"] { background: #E8F3EC; border-color: #BFE3CC; color: #1B8E4C; }
-    .alpha-shift:focus-visible, .alpha-key:focus-visible { outline: 2px solid #1B8E4C; outline-offset: 1px; }
+    .alpha-shift[aria-pressed="true"] { background: var(--chip-bg); border-color: var(--accent-border); color: var(--link); }
+    .alpha-shift:focus-visible, .alpha-key:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
     .alpha-keys { display: grid; grid-template-columns: repeat(auto-fill, minmax(38px, 1fr)); gap: 6px; margin-top: 10px; direction: ltr; }
     .alpha-key {
       height: 38px; border: 1px solid #EFEADF; background: #fff; border-radius: 10px; cursor: pointer; padding: 0;
       font: 600 17px 'Noto Sans', sans-serif; color: #211F1B;
       transition: background .12s, border-color .12s, color .12s, transform .06s;
     }
-    .alpha-key.sp { background: #F1F7F3; border-color: #D5E9DB; color: #147139; }
-    .alpha-key:hover { border-color: #BFE3CC; background: #E8F3EC; color: #1B8E4C; }
+    .alpha-key.sp { background: var(--key-sp-bg); border-color: var(--key-sp-border); color: var(--accent-deep); }
+    .alpha-key:hover { border-color: var(--accent-border); background: var(--accent-tint); color: var(--link); }
     .alpha-key:active { transform: scale(.94); }
     .alpha-sep { grid-column: 1 / -1; height: 1px; background: #EFEADF; margin: 2px 0; }
 
@@ -373,9 +400,9 @@
       content: ""; position: absolute; left: 50%; top: 50%; width: 46px; height: 6px; margin: -3px 0 0 -23px;
       border-radius: 3px; background: #CFC7B2; transition: background .15s;
     }
-    html.panel .out-divider:hover .line, html.panel .out-divider.dragging .line { background: #BFE3CC; }
-    html.panel .out-divider:hover::after, html.panel .out-divider.dragging::after, html.panel .out-divider:focus-visible::after { background: #1B8E4C; }
-    html.panel .out-divider:focus-visible { outline: 2px solid #1B8E4C; outline-offset: -2px; border-radius: 6px; }
+    html.panel .out-divider:hover .line, html.panel .out-divider.dragging .line { background: var(--accent-border); }
+    html.panel .out-divider:hover::after, html.panel .out-divider.dragging::after, html.panel .out-divider:focus-visible::after { background: var(--brand); }
+    html.panel .out-divider:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; border-radius: 6px; }
     body.splitting { user-select: none; cursor: row-resize; }
 
     /* ---- Arabe (droite à gauche) ---- */
@@ -395,16 +422,16 @@
       background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25);
       transition: transform .25s; transform: translateX(0);
     }
-    .toggle.on .toggle-track { background: #1B8E4C; }
+    .toggle.on .toggle-track { background: var(--brand-light); }
     .toggle.on .toggle-knob { transform: translateX(20px); }
 
     /* ---- Action buttons ---- */
     .actions { display: flex; gap: 12px; margin-top: 16px; }
     .btn-primary {
       flex: 1.7; border: none; border-radius: 14px; padding: 14px;
-      background: linear-gradient(160deg,#23a85e,#147139);
+      background: linear-gradient(160deg,var(--brand-light),var(--brand-dark));
       color: #fff; font: 700 15px 'Hanken Grotesk', sans-serif; cursor: pointer;
-      box-shadow: 0 8px 18px rgba(20,113,57,.28);
+      box-shadow: 0 8px 18px rgba(var(--cossack-rgb),.30);
       transition: filter .15s;
     }
     .btn-primary:hover { filter: brightness(1.05); }
@@ -433,7 +460,7 @@
       border-radius: 50%;
       border: 1px solid rgba(0,0,0,.10);
       background: rgba(255,255,255,.88);
-      color: #7E9A82;
+      color: var(--soft-icon);
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       flex: none;
@@ -444,17 +471,17 @@
     .in-main { flex: 1; min-width: 0; }
     .btn-expand {
       width: 32px; height: auto; min-height: 60px; align-self: stretch; border-radius: 16px;
-      background: #F6F3EA; border: 1px solid #E8E2D2; color: #7E9A82;
+      background: #F6F3EA; border: 1px solid #E8E2D2; color: var(--soft-icon);
     }
-    .btn-expand:hover { background: #E8F3EC; border-color: #BFE3CC; }
+    .btn-expand:hover { background: var(--accent-tint); border-color: var(--accent-border); }
     .btn-expand[hidden] { display: none; }
     /* panneau latéral déjà ouvert : le bouton devient « Réduire » (chevron retourné) */
     .btn-expand.reduce svg { transform: rotate(180deg); }
-    .btn-expand:hover { color: #1B8E4C; }
+    .btn-expand:hover { color: var(--link); }
     .btn-expand svg { transition: transform .25s; }
     /* Texte volumineux : on attire l'attention sur la bascule */
     .btn-expand.attn {
-      background: #E8F3EC; color: #1B8E4C; border-color: #BFE3CC;
+      background: var(--accent-tint); color: var(--link); border-color: var(--accent-border);
       animation: nudge 1.6s ease-in-out infinite;
     }
     @keyframes nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
