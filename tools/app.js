@@ -67,14 +67,14 @@
 
   var el = {};
   ['input', 'lblCyr', 'lblLat', 'lblMisal', 'lblCopy', 'misalHint', 'outBlock', 'output', 'btnCopy', 'sub', 'privacy',
-   'verFoot', 'lblLicense', 'lblContact', 'aboutLicense', 'aboutContact', 'privacyLink',
+   'verFoot', 'lblLicense', 'lblContact', 'aboutLicense', 'aboutContact', 'privacyLink', 'themeSeg',
    'btnReport', 'lblReport', 'btnReportProblem', 'reportNote',
    'langBtn', 'langMenu', 'langFlag', 'langCode',
    'alphaToggle', 'lblAlpha', 'alphaBody', 'latInput', 'alphaKeys', 'alphaShift', 'alphaClear', 'alphaCopy', 'lblAlphaCopy'
   ].forEach(function (id) { el[id] = document.getElementById(id); });
   el.langItems = Array.prototype.slice.call(document.querySelectorAll('.lang-item'));
 
-  var state = { lang: DEFAULT_LANGUAGE, shift: false };
+  var state = { lang: DEFAULT_LANGUAGE, shift: false, theme: 'auto' };
   var engineReady = null;
 
   // ---------- Langue ----------
@@ -87,6 +87,63 @@
       if (T[base]) return base;
     }
     return DEFAULT_LANGUAGE;
+  }
+
+  // ---------- Thème clair / sombre (2.6) : automatique = réglage clair/sombre du système ; mémorisé dans ce navigateur ----------
+  var THEME_CACHE_KEY = 'clsTheme';
+  var THEME_ORDER = ['auto', 'light', 'dark'];
+  var darkQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+
+  function effectiveDark() { return state.theme === 'dark' || (state.theme === 'auto' && !!(darkQuery && darkQuery.matches)); }
+
+  function applyTheme(mode) {
+    var m = (mode === 'light' || mode === 'dark') ? mode : 'auto';
+    state.theme = m;
+    if (m === 'auto') document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.setAttribute('data-theme', m);
+    lsSet(THEME_CACHE_KEY, m);
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', effectiveDark() ? '#2A3322' : '#E3EBD3');
+    updateThemeUI();
+  }
+
+  function updateThemeUI() {
+    if (!el.themeSeg) return;
+    var t = T[state.lang] || T[DEFAULT_LANGUAGE];
+    var names = { auto: t.themeAuto, light: t.themeLight, dark: t.themeDark };
+    el.themeSeg.title = t.theme + ' : ' + names[state.theme];
+    el.themeSeg.setAttribute('aria-label', t.theme);
+    el.themeSeg.style.setProperty('--i', String(THEME_ORDER.indexOf(state.theme)));
+    Array.prototype.forEach.call(el.themeSeg.querySelectorAll('[data-theme-val]'), function (b) {
+      var v = b.getAttribute('data-theme-val');
+      var on = v === state.theme;
+      b.setAttribute('aria-checked', on ? 'true' : 'false');
+      b.tabIndex = on ? 0 : -1;
+      b.title = names[v];
+      b.setAttribute('aria-label', names[v]);
+    });
+  }
+
+  function initThemeSeg() {
+    if (!el.themeSeg) return;
+    el.themeSeg.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('[data-theme-val]') : null;
+      if (b) applyTheme(b.getAttribute('data-theme-val'));
+    });
+    el.themeSeg.addEventListener('keydown', function (e) {
+      var i = THEME_ORDER.indexOf(state.theme);
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') i = (i + 1) % 3;
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') i = (i + 2) % 3;
+      else if (e.key === 'Home') i = 0;
+      else if (e.key === 'End') i = 2;
+      else return;
+      e.preventDefault();
+      applyTheme(THEME_ORDER[i]);
+      var nb = el.themeSeg.querySelector('[data-theme-val="' + THEME_ORDER[i] + '"]');
+      if (nb) nb.focus();
+    });
+    // le système change de mode pendant que le site est ouvert : en « automatique », la couleur de la barre du navigateur suit
+    if (darkQuery && darkQuery.addEventListener) darkQuery.addEventListener('change', function () { if (state.theme === 'auto') applyTheme('auto'); });
   }
 
   function applyLanguage(code) {
@@ -130,6 +187,7 @@
     el.lblContact.textContent = t.aboutContact;
     el.privacyLink.textContent = PRIVACY_LINK[state.lang] || PRIVACY_LINK.en;
     updateLangUI(state.lang);
+    updateThemeUI();
     refreshAlphabet();
   }
 
@@ -413,6 +471,8 @@
     buildAlphabet();
     applyLanguage(pickInitialLang());
     initLangMenu();
+    initThemeSeg();
+    applyTheme(lsGet(THEME_CACHE_KEY));
 
     el.input.addEventListener('input', onInput);
     el.misalHint.addEventListener('click', fillExample);

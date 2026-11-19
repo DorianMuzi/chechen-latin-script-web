@@ -66,6 +66,38 @@
 
   /* drapeau */
   --flag-red: var(--eugenia-red);
+
+  /* reflets et voiles (blancs en mode clair, presque invisibles en mode sombre) */
+  --banner-glow: rgba(255,255,255,.7); --deco-glow: rgba(255,255,255,.55); --btn-soft: rgba(255,255,255,.75);
+  --note-bg: rgba(255,255,255,.7); --inset-hi: rgba(255,255,255,.7); --stripe-white: #FFFFFF;
+}
+
+/* ---- Mode sombre : second jeu de valeurs pour les mêmes rôles (2.6) ----
+   Les rôles partagés avec la popup de l'extension (bandeau, vert, olive, neutres --n-*, logo) viennent du bloc sombre de popup.htm ;
+   ici les rôles propres au site. data-theme="dark" force le sombre, "light" le clair, sans attribut : suit le système. */
+:root[data-theme="dark"] {
+  --page-bg: #14170F; --surface: #1F231A; --surface-field: #191C14;
+  --text: #F5F4E6; --text-field: #ECEADC; --text-soft: #A5A793; --text-subtitle: #CFE6A3; --placeholder: #7E816D;
+  --border-card: #2E3426; --border-field: #3A4230; --border-field-hover: #4D5E36; --border-dash: #2E3426;
+  --result-bg-top: #232A1B; --result-bg-bottom: #1E2517; --toggle-bg: #2B3322;
+  --key-top: #2B3022; --key-bottom: #232719; --key-border: #3A4230; --key-edge: #10130B;
+  --key-sp-top: #33402A; --key-sp-bottom: #2A3622; --key-sp-border: #465B33; --key-sp-edge: #1C2616; --key-hover-border: #6BA84A;
+  --shadow-rgb: 0, 0, 0;
+  --banner-glow: rgba(255,255,255,.04); --deco-glow: rgba(255,255,255,.05); --btn-soft: rgba(255,255,255,.06);
+  --note-bg: rgba(255,255,255,.05); --inset-hi: rgba(255,255,255,.05); --stripe-white: #CFCDBB;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+  --page-bg: #14170F; --surface: #1F231A; --surface-field: #191C14;
+  --text: #F5F4E6; --text-field: #ECEADC; --text-soft: #A5A793; --text-subtitle: #CFE6A3; --placeholder: #7E816D;
+  --border-card: #2E3426; --border-field: #3A4230; --border-field-hover: #4D5E36; --border-dash: #2E3426;
+  --result-bg-top: #232A1B; --result-bg-bottom: #1E2517; --toggle-bg: #2B3322;
+  --key-top: #2B3022; --key-bottom: #232719; --key-border: #3A4230; --key-edge: #10130B;
+  --key-sp-top: #33402A; --key-sp-bottom: #2A3622; --key-sp-border: #465B33; --key-sp-edge: #1C2616; --key-hover-border: #6BA84A;
+  --shadow-rgb: 0, 0, 0;
+  --banner-glow: rgba(255,255,255,.04); --deco-glow: rgba(255,255,255,.05); --btn-soft: rgba(255,255,255,.06);
+  --note-bg: rgba(255,255,255,.05); --inset-hi: rgba(255,255,255,.05); --stripe-white: #CFCDBB;
+  }
 }
 
 /* Page : crème neutre (la palette n'est qu'en accents, pour que le mode sombre reste simple) */
@@ -83,14 +115,14 @@ body.web .banner {
   display: block; position: relative; border-radius: 0; padding: 0;
   background:
     radial-gradient(520px 260px at 92% -20%, rgba(var(--cossack-rgb), .16), rgba(var(--cossack-rgb), 0) 70%),
-    radial-gradient(420px 220px at 6% 120%, rgba(255,255,255,.7), rgba(255,255,255,0) 70%),
+    radial-gradient(420px 220px at 6% 120%, var(--banner-glow), transparent 70%),
     var(--banner-bg);
   color: var(--text);
   box-shadow: 0 6px 22px rgba(var(--shadow-rgb), .14);
 }
 .hero-deco { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 .hero-deco span { position: absolute; border-radius: 50%; }
-.hero-deco .c1 { width: 300px; height: 300px; right: -80px; top: -140px; border: 2px solid rgba(var(--cossack-rgb), .20); background: radial-gradient(circle, rgba(255,255,255,.55), rgba(255,255,255,0) 70%); }
+.hero-deco .c1 { width: 300px; height: 300px; right: -80px; top: -140px; border: 2px solid rgba(var(--cossack-rgb), .20); background: radial-gradient(circle, var(--deco-glow), transparent 70%); }
 .hero-deco .c2 { width: 190px; height: 190px; left: 34%; bottom: -120px; border: 2px solid rgba(var(--cossack-rgb), .14); }
 .hero-inner { position: relative; max-width: 680px; margin: 0 auto; padding: 18px 14px 34px; }
 .banner-row { display: flex; align-items: center; gap: 10px; }
@@ -101,8 +133,8 @@ body.web .subtitle {
   margin: 14px 2px 0; text-align: start; color: var(--text-subtitle);
   font: 600 clamp(14px, 3.6vw, 17px)/1.4 'Hanken Grotesk', 'Noto Sans', sans-serif; letter-spacing: .01em;
 }
-.flag-stripe { position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: linear-gradient(180deg, #FFFFFF 0 22%, var(--flag-red) 22% 78%, #FFFFFF 78% 100%); box-shadow: 0 -1px 0 rgba(0,0,0,.08); }
-body.web .lang-btn { height: 34px; padding: 0 10px 0 8px; box-shadow: 0 3px 10px rgba(var(--shadow-rgb), .16); background: rgba(255,255,255,.92); border-color: rgba(0,0,0,.08); }
+.flag-stripe { position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: linear-gradient(180deg, var(--stripe-white) 0 22%, var(--flag-red) 22% 78%, var(--stripe-white) 78% 100%); box-shadow: 0 -1px 0 rgba(0,0,0,.08); }
+body.web .lang-btn { height: 34px; padding: 0 10px 0 8px; box-shadow: 0 3px 10px rgba(var(--shadow-rgb), .16); background: var(--n-glass); border-color: var(--n-glass-border); }
 body.web .lang-btn .flag { width: 24px; height: 16px; }
 body.web .lang-btn:hover, body.web .lang-btn[aria-expanded="true"] { background: var(--accent-tint); color: var(--brand); border-color: var(--accent-border); }
 body.web .lang-menu { z-index: 30; }
@@ -142,7 +174,7 @@ body.web .out-panel {
   margin-top: 0; padding: 14px 18px 16px; border-radius: 18px;
   background: linear-gradient(160deg, var(--result-bg-top) 0%, var(--result-bg-bottom) 100%);
   border: 1.5px solid var(--accent-border);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
+  box-shadow: inset 0 1px 0 var(--inset-hi);
 }
 body.web .out-head { margin-bottom: 8px; }
 body.web .out-head .lat { font-size: 13px; color: var(--accent-strong); letter-spacing: .14em; }
@@ -150,7 +182,7 @@ body.web #output { max-height: none; overflow-y: visible; font: 700 clamp(20px, 
 body.web .out-actions { gap: 8px; }
 body.web .out-panel .btn-copy {
   padding: 8px 14px; border-radius: 999px; font-size: 13px; font-weight: 700;
-  border: 1.5px solid var(--accent-border); background: rgba(255,255,255,.75); color: var(--accent);
+  border: 1.5px solid var(--accent-border); background: var(--btn-soft); color: var(--accent);
   transition: background .15s, color .15s, transform .08s, box-shadow .15s;
 }
 body.web .out-panel .btn-copy:hover { background: var(--surface); color: var(--brand); }
@@ -194,9 +226,13 @@ body.web .alpha-sep { margin: 4px 0; background: var(--border-card); }
 .web-note {
   display: flex; align-items: center; justify-content: center; gap: 8px; text-align: center;
   margin: 22px auto 8px; padding: 9px 16px; max-width: 520px; border-radius: 999px;
-  background: rgba(255,255,255,.7); border: 1px solid var(--border-field);
+  background: var(--note-bg); border: 1px solid var(--border-field);
   font: 600 13px/1.45 'Hanken Grotesk', 'Noto Sans', sans-serif; color: var(--accent);
 }
+/* logo vectoriel du bandeau (mêmes flèches que l'extension) */
+body.web .banner .logo { width: 64px; height: 52px; margin: 0 6px 0 2px; }
+/* sélecteur de thème (automatique / clair / sombre) sous le pied de page */
+.web-theme { display: flex; justify-content: center; margin: 14px 0 8px; }
 .web-note[hidden] { display: none; }
 #privacyLink { white-space: nowrap; }
 .web-note-title { font-weight: 800; color: var(--link); letter-spacing: .02em; }
@@ -222,6 +258,7 @@ body.web .alpha-sep { margin: 4px 0; background: var(--border-card); }
 @container (max-width: 205px) { body.web .banner .name-script { display: none; } }
 @media (max-width: 480px) {
   body.web .banner img { width: 44px; height: 44px; padding: 5px; }
+  body.web .banner .logo { width: 46px; height: 38px; margin: 0 4px 0 0; }
   body.web .banner .name-cap { font-size: 15px; letter-spacing: .06em; }
   body.web .banner .name-script { font-size: 21px; }
   body.web .lang-btn { height: 32px; padding: 0 8px 0 7px; }

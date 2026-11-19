@@ -51,7 +51,7 @@ const LANGS = vm.runInNewContext('(' + take(/const LANGS = (\{[\s\S]*?\n\});/, p
 const ALPHABET = vm.runInNewContext('(' + take(/const ALPHABET = (\[[\s\S]*?\n\]);/, popupJs, 'ALPHABET')[1] + ')');
 // Les textes propres à l'extension (description, signalement, raccourcis…) ne sont pas repris
 const KEEP = ['sub', 'lang', 'cyr', 'lat', 'misal', 'copy', 'ph', 'report', 'reportProblem', 'aboutVersion', 'aboutLicense', 'aboutContact',
-  'alpha', 'alphaPh', 'alphaShift', 'alphaClear', 'alphaEng', 'alphaW'];
+  'alpha', 'alphaPh', 'alphaShift', 'alphaClear', 'alphaEng', 'alphaW', 'theme', 'themeAuto', 'themeLight', 'themeDark'];
 const T2 = {};
 Object.keys(T).forEach((l) => { T2[l] = {}; KEEP.forEach((k) => { if (!(k in T[l])) throw new Error('Clé manquante ' + l + '.' + k); T2[l][k] = T[l][k]; }); });
 // ---- formulaires de retour (un formulaire Google par langue) : repris de background.js de l'extension
