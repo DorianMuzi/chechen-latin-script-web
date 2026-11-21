@@ -452,16 +452,17 @@
   var SHARE_LINK_MAX = 600;    // au-delà de ce nombre de lettres (texte d'origine), pas de lien « avec le texte » (adresse trop longue)
   var SHARE_X_MAX = 220;       // X limite à 280 caractères, adresse comprise
   var SHARE_IN_MAX = 4000;     // à la lecture d'un lien : on ignore tout ce qui dépasse
-  // ce : fournis par l'utilisateur. Autres langues : non relues par des locuteurs natifs.
+  // ce : share / link / project fournis par l'utilisateur ; « more » = conversion par le moteur du mot « Кхин а » fourni dans
+  // le texte collé (à CONFIRMER par l'utilisateur, notamment le ŋ final). Autres langues : non relues par des locuteurs natifs.
   var SHARE_STR = {
-    ce: { share: 'Deq̇a', link: 'Ẋaƶorg sẋaeca', project: 'Proekt deq̇a' },
-    en: { share: 'Share', link: 'Copy link', project: 'Share the project' },
-    fr: { share: 'Partager', link: 'Copier le lien', project: 'Partager le projet' },
-    ru: { share: 'Поделиться', link: 'Копировать ссылку', project: 'Поделиться проектом' },
-    de: { share: 'Teilen', link: 'Link kopieren', project: 'Projekt teilen' },
-    tr: { share: 'Paylaş', link: 'Bağlantıyı kopyala', project: 'Projeyi paylaş' },
-    es: { share: 'Compartir', link: 'Copiar enlace', project: 'Compartir el proyecto' },
-    ar: { share: 'مشاركة', link: 'نسخ الرابط', project: 'مشاركة المشروع' }
+    ce: { share: 'Deq̇a', link: 'Ẋaƶorg sẋaeca', project: 'Proekt deq̇a', more: 'Qiŋ a' },
+    en: { share: 'Share', link: 'Copy link', project: 'Share the project', more: 'More' },
+    fr: { share: 'Partager', link: 'Copier le lien', project: 'Partager le projet', more: 'Plus' },
+    ru: { share: 'Поделиться', link: 'Копировать ссылку', project: 'Поделиться проектом', more: 'Ещё' },
+    de: { share: 'Teilen', link: 'Link kopieren', project: 'Projekt teilen', more: 'Mehr' },
+    tr: { share: 'Paylaş', link: 'Bağlantıyı kopyala', project: 'Projeyi paylaş', more: 'Diğer' },
+    es: { share: 'Compartir', link: 'Copiar enlace', project: 'Compartir el proyecto', more: 'Más' },
+    ar: { share: 'مشاركة', link: 'نسخ الرابط', project: 'مشاركة المشروع', more: 'المزيد' }
   };
   var shareOpen = null;        // { menu, button, kind }
 
@@ -505,11 +506,16 @@
   function shareItems(kind) {
     var d = shareData(kind), q = encodeURIComponent, s = shareStr(), items = [];
     var xText = d.text.length > SHARE_X_MAX ? d.text.slice(0, SHARE_X_MAX - 1).replace(/\s+$/, '') + '…' : d.text;
-    items.push({ id: 'telegram', label: 'Telegram', href: 'https://t.me/share/url?url=' + q(d.url) + '&text=' + q(d.text) });
+    // Ordre : messageries d'abord (WhatsApp, Telegram), puis X (et Facebook pour le projet), « Copier le lien », « Plus ».
+    // Instagram et TikTok n'ont pas de lien de partage depuis un navigateur : ils passent par le menu du téléphone,
+    // par « Plus » ou par « Copier le lien ».
     items.push({ id: 'whatsapp', label: 'WhatsApp', href: 'https://wa.me/?text=' + q(d.text + '\n' + d.url) });
+    items.push({ id: 'telegram', label: 'Telegram', href: 'https://t.me/share/url?url=' + q(d.url) + '&text=' + q(d.text) });
     items.push({ id: 'x', label: 'X', href: 'https://x.com/intent/post?text=' + q(xText) + '&url=' + q(d.url) });
     if (d.facebook) items.push({ id: 'facebook', label: 'Facebook', href: 'https://www.facebook.com/sharer/sharer.php?u=' + q(d.url) });
     if (d.link) items.push({ id: 'copy', label: s.link, copy: d.link });
+    // « Plus » : le menu de partage du système (ordinateur seulement, et seulement si le navigateur le propose)
+    if (typeof navigator.share === 'function') items.push({ id: 'more', label: s.more, native: true });
     return items;
   }
 
@@ -562,6 +568,10 @@
         if (it.copy) {
           copyText(it.copy, b);
           setTimeout(function () { closeShareMenu(true); }, 700);
+        } else if (it.native) {
+          var nd = shareData(kind);
+          closeShareMenu(false);
+          try { navigator.share({ title: 'Chechen Latin Script', text: nd.text, url: nd.url }).catch(function () { /* annulé par la personne */ }); } catch (e) { /* menu du système indisponible */ }
         } else {
           window.open(it.href, '_blank', 'noopener,noreferrer');
           closeShareMenu(false);

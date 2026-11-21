@@ -53,13 +53,14 @@ const unb64u = (s) => Buffer.from(s.replace(/-/g, '+').replace(/_/g, '/'), 'base
     await setText(s, 'Нохчийн мотт');
     const result = await ev(s, "document.getElementById('output').textContent");
     await stubOpen(s);
+    const HAS = (await ev(s, "typeof navigator.share === 'function'")) === true; const MZ = HAS ? ',more' : '';   // Chrome sous Windows propose navigator.share : « Plus » apparaît alors
     const lay = JSON.parse(await ev(s, "JSON.stringify((()=>{const r=id=>document.getElementById(id).getBoundingClientRect();return {order:r('btnReport').left<r('btnShare').left&&r('btnShare').left<r('btnCopy').left,vis:r('btnShare').width>0,label:document.getElementById('lblShare').textContent,exp:document.getElementById('btnShare').getAttribute('aria-expanded')}})())"));
     ck('bouton « Share » visible entre Signaler et Copier', lay.order && lay.vis && lay.label === 'Share', JSON.stringify(lay));
     await click(s, '#btnShare');
     let m = await menuInfo(s, 'shareMenu');
-    ck('clic : menu ouvert avec Telegram, WhatsApp, X, Copier le lien (pas de Facebook pour un texte)', !m.hidden && m.ids.join() === 'telegram,whatsapp,x,copy' && m.labels[3] === '⧉ Copy link', JSON.stringify(m));
+    ck('clic : menu ouvert avec WhatsApp, Telegram, X, Copier le lien (pas de Facebook pour un texte)', !m.hidden && m.ids.join() === 'whatsapp,telegram,x,copy' + MZ && m.labels[3] === '⧉ Copy link', JSON.stringify(m));
     ck('le menu est entièrement visible, rien n\'est rogné', m.inView && m.lastOnTop === true, JSON.stringify(m));
-    ck('focus sur le premier choix, aria-expanded', m.focus === 'telegram' && (await ev(s, "document.getElementById('btnShare').getAttribute('aria-expanded')")) === 'true', JSON.stringify(m));
+    ck('focus sur le premier choix, aria-expanded', m.focus === 'whatsapp' && (await ev(s, "document.getElementById('btnShare').getAttribute('aria-expanded')")) === 'true', JSON.stringify(m));
     { const sh = await br.send('Page.captureScreenshot', { format: 'png' }, s); fs.writeFileSync(path.join(OUT, 'share-menu.png'), Buffer.from(sh.data, 'base64')); }
     await click(s, '[data-share="telegram"]');
     let o = await opened(s);
@@ -89,16 +90,16 @@ const unb64u = (s) => Buffer.from(s.replace(/-/g, '+').replace(/_/g, '/'), 'base
     const long2 = ('Нохчийн мотт ').repeat(60).trim();           // ~779 lettres : au-delà de 600
     await setText(s, long2);
     await click(s, '#btnShare'); m = await menuInfo(s, 'shareMenu');
-    ck('texte de plus de 600 lettres : pas de lien avec le texte, les autres services restent', m.ids.join() === 'telegram,whatsapp,x', JSON.stringify(m.ids));
+    ck('texte de plus de 600 lettres : pas de lien avec le texte, les autres services restent', m.ids.join() === 'whatsapp,telegram,x' + MZ, JSON.stringify(m.ids));
     await click(s, '#sub');
 
     L('== 3. Clavier, clic ailleurs, menus exclusifs');
     await setText(s, 'Нохчийн мотт');
     await ev(s, "document.getElementById('btnShare').focus()"); await key(s, 'ArrowDown', 40);
-    m = await menuInfo(s, 'shareMenu'); ck('flèche bas sur le bouton : ouvre, focus sur Telegram', !m.hidden && m.focus === 'telegram', JSON.stringify(m));
-    await key(s, 'ArrowDown', 40); m = await menuInfo(s, 'shareMenu'); ck('flèche bas : WhatsApp', m.focus === 'whatsapp', m.focus);
-    await key(s, 'End', 35); m = await menuInfo(s, 'shareMenu'); ck('Fin : dernier choix (copier le lien)', m.focus === 'copy', m.focus);
-    await key(s, 'Home', 36); m = await menuInfo(s, 'shareMenu'); ck('Début : premier choix', m.focus === 'telegram', m.focus);
+    m = await menuInfo(s, 'shareMenu'); ck('flèche bas sur le bouton : ouvre, focus sur WhatsApp', !m.hidden && m.focus === 'whatsapp', JSON.stringify(m));
+    await key(s, 'ArrowDown', 40); m = await menuInfo(s, 'shareMenu'); ck('flèche bas : Telegram', m.focus === 'telegram', m.focus);
+    await key(s, 'End', 35); m = await menuInfo(s, 'shareMenu'); ck('Fin : dernier choix', m.focus === (HAS ? 'more' : 'copy'), m.focus);
+    await key(s, 'Home', 36); m = await menuInfo(s, 'shareMenu'); ck('Début : premier choix', m.focus === 'whatsapp', m.focus);
     await key(s, 'Escape', 27); m = await menuInfo(s, 'shareMenu');
     ck('Échap : ferme et rend le focus au bouton', m.hidden && (await ev(s, 'document.activeElement.id')) === 'btnShare', JSON.stringify(m));
     await key(s, 'ArrowDown', 40); await key(s, 'Tab', 9); ck('Tab : ferme', (await menuInfo(s, 'shareMenu')).hidden);
@@ -114,7 +115,7 @@ const unb64u = (s) => Buffer.from(s.replace(/-/g, '+').replace(/_/g, '/'), 'base
     await stubOpen(s);
     await click(s, '#btnShareProject');
     m = await menuInfo(s, 'shareMenuProject');
-    ck('menu : Telegram, WhatsApp, X, Facebook, Copier le lien', m.ids.join() === 'telegram,whatsapp,x,facebook,copy', JSON.stringify(m));
+    ck('menu : WhatsApp, Telegram, X, Facebook, Copier le lien', m.ids.join() === 'whatsapp,telegram,x,facebook,copy' + MZ, JSON.stringify(m));
     ck('le menu s\'ouvre vers le haut, entièrement visible', m.inView && m.lastOnTop === true, JSON.stringify(m));
     { const sh = await br.send('Page.captureScreenshot', { format: 'png' }, s); fs.writeFileSync(path.join(OUT, 'share-project-menu.png'), Buffer.from(sh.data, 'base64')); }
     await click(s, '#shareMenuProject [data-share="facebook"]');
@@ -179,23 +180,29 @@ const unb64u = (s) => Buffer.from(s.replace(/-/g, '+').replace(/_/g, '/'), 'base
     await setText(s, 'Нохчийн мотт'); await click(s, '#btnShare');
     got = JSON.parse(await ev(s, "JSON.stringify({shared:window.__shared.length,menuHidden:document.getElementById('shareMenu').hidden})"));
     ck('ordinateur : même si navigator.share existe, c\'est notre menu qui s\'ouvre', got.shared === 0 && got.menuHidden === false, JSON.stringify(got));
+    const mi2 = await menuInfo(s, 'shareMenu');
+    ck('ordinateur avec navigator.share : « Plus » est le dernier choix', mi2.ids.join() === 'whatsapp,telegram,x,copy,more' && mi2.labels[4].length > 0, JSON.stringify(mi2));
+    await click(s, '[data-share="more"]');
+    got = JSON.parse(await ev(s, "JSON.stringify({shared:window.__shared,menuHidden:document.getElementById('shareMenu').hidden})"));
+    ck('« Plus » : ouvre le menu de partage du système avec le texte et l\'adresse, notre menu se ferme', got.shared.length === 1 && got.shared[0].url === PROJECT && got.shared[0].text.length > 0 && got.menuHidden === true, JSON.stringify(got));
     await br.send('Target.closeTarget', { targetId: t.targetId });
 
     L('== 7. Huit langues, droite à gauche, petits écrans');
     const EXPECT = { ce: ['Deq̇a', 'Proekt deq̇a', 'Ẋaƶorg sẋaeca'], en: ['Share', 'Share the project', 'Copy link'], fr: ['Partager', 'Partager le projet', 'Copier le lien'],
       ru: ['Поделиться', 'Поделиться проектом', 'Копировать ссылку'], de: ['Teilen', 'Projekt teilen', 'Link kopieren'], tr: ['Paylaş', 'Projeyi paylaş', 'Bağlantıyı kopyala'],
       es: ['Compartir', 'Compartir el proyecto', 'Copiar enlace'], ar: ['مشاركة', 'مشاركة المشروع', 'نسخ الرابط'] };
+    const MORE = { ce: 'Qi\u014B a', en: 'More', fr: 'Plus', ru: 'Ещё', de: 'Mehr', tr: 'Diğer', es: 'Más', ar: 'المزيد' };
     ({ t, s } = await open(URL_SITE, 375, 700, true));
-    await ev(s, "localStorage.clear();1");
+    await ev(s, "localStorage.clear();window.__shared=[];navigator.share=(d)=>{window.__shared.push(d);return Promise.resolve()};1");
     await setText(s, 'Нохчийн мотт');
     for (const l of Object.keys(EXPECT)) {
       await setLang(s, l);
       const g = JSON.parse(await ev(s, "JSON.stringify({a:document.getElementById('lblShare').textContent,b:document.getElementById('btnShareProject').textContent,sw:document.documentElement.scrollWidth,cw:document.documentElement.clientWidth,dir:document.documentElement.dir})"));
       await click(s, '#btnShare'); const mi = await menuInfo(s, 'shareMenu');
-      const copyLbl = (mi.labels[mi.labels.length - 1] || '').replace(/^⧉ /, '');
+      const copyLbl = (mi.labels[mi.ids.indexOf('copy')] || '').replace(/^⧉ /, ''); const moreLbl = mi.labels[mi.ids.indexOf('more')] || '';
       await click(s, '#sub');
       await click(s, '#btnShareProject'); const mp = await menuInfo(s, 'shareMenuProject'); await click(s, '#sub');
-      ck(l + ' : libellés, pas de défilement horizontal, menus dans la fenêtre', g.a === EXPECT[l][0] && g.b === EXPECT[l][1] && copyLbl === EXPECT[l][2] && g.sw <= g.cw && mi.inView && mp.inView && (l !== 'ar' || g.dir === 'rtl'), JSON.stringify({ g, copyLbl, mi: mi.r, mp: mp.r }));
+      ck(l + ' : libellés, pas de défilement horizontal, menus dans la fenêtre', g.a === EXPECT[l][0] && g.b === EXPECT[l][1] && copyLbl === EXPECT[l][2] && moreLbl === MORE[l] && g.sw <= g.cw && mi.inView && mp.inView && (l !== 'ar' || g.dir === 'rtl'), JSON.stringify({ g, copyLbl, mi: mi.r, mp: mp.r }));
       if (l === 'ar') { await click(s, '#btnShare'); const sh = await br.send('Page.captureScreenshot', { format: 'png' }, s); fs.writeFileSync(path.join(OUT, 'share-ar-375.png'), Buffer.from(sh.data, 'base64')); await click(s, '#sub'); }
       if (l === 'ru') { await click(s, '#btnShare'); const sh = await br.send('Page.captureScreenshot', { format: 'png' }, s); fs.writeFileSync(path.join(OUT, 'share-ru-375.png'), Buffer.from(sh.data, 'base64')); await click(s, '#sub'); }
     }
