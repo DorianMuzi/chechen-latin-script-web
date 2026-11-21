@@ -179,7 +179,8 @@ body.web .out-panel {
 body.web .out-head { margin-bottom: 8px; }
 body.web .out-head .lat { font-size: 13px; color: var(--accent-strong); letter-spacing: .14em; }
 body.web #output { max-height: none; overflow-y: visible; font: 700 clamp(20px, 5vw, 25px)/1.5 'Noto Sans', sans-serif; color: var(--accent-strong); }
-body.web .out-actions { gap: 8px; }
+body.web .out-head { flex-wrap: wrap; gap: 8px; }
+body.web .out-actions { gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 body.web .out-panel .btn-copy {
   padding: 8px 14px; border-radius: 999px; font-size: 13px; font-weight: 700;
   border: 1.5px solid var(--accent-border); background: var(--btn-soft); color: var(--accent);
@@ -262,6 +263,7 @@ body.web .banner .logo { width: 64px; height: 52px; margin: 0 6px 0 2px; }
   body.web .banner .name-cap { font-size: 15px; letter-spacing: .06em; }
   body.web .banner .name-script { font-size: 21px; }
   body.web .lang-btn { height: 32px; padding: 0 8px 0 7px; }
+  body.web .out-panel .btn-copy { padding: 7px 11px; }
   body.web .lang-btn #langCode { display: none; } /* sur téléphone : drapeau seul (le nom de la langue est dans le menu) */
   body.web .card-transcriber { padding: 16px; border-radius: 20px; }
   body.web textarea#input { font-size: 19px; }
@@ -271,3 +273,35 @@ body.web .banner .logo { width: 64px; height: 52px; margin: 0 6px 0 2px; }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
+
+/* ---- Sélecteur de thème (automatique / clair / sombre) : propre au site ----
+   (l'extension a maintenant une icône dans sa bannière ; ces règles ne viennent donc plus du style de la popup) */
+.theme-seg {
+  position: relative; display: inline-grid; grid-template-columns: repeat(3, 34px); direction: ltr; --i: 0;
+  padding: 2px; border: 1px solid var(--n-line2); background: var(--n-surface); border-radius: 999px;
+}
+.theme-seg .thumb {
+  position: absolute; top: 2px; left: 2px; width: 34px; height: 28px; box-sizing: border-box; border-radius: 999px;
+  background: var(--chip-bg); border: 1px solid var(--accent-border);
+  transform: translateX(calc(var(--i) * 34px)); transition: transform .22s cubic-bezier(.4, .1, .2, 1);
+}
+.theme-seg button {
+  position: relative; z-index: 1; height: 28px; padding: 0; border: 0; background: transparent; border-radius: 999px;
+  color: var(--n-text3); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: color .15s;
+}
+.theme-seg button svg { width: 15px; height: 15px; display: block; }
+.theme-seg button:hover, .theme-seg button[aria-checked="true"] { color: var(--link); }
+.theme-seg button:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+@media (prefers-reduced-motion: reduce) { .theme-seg .thumb { transition: none; } }
+
+/* le nom « Latin Script » du bandeau de l'extension se masque à 237 px ; sur le site, c'est à 205 px (règle plus haut) */
+@container (min-width: 206px) { body.web .banner .name-script { display: block; } }
+
+/* ---- Partage : menu sous le bouton « Partager » (résultat) et sous « Partager le projet » (pied de page) ---- */
+.share-wrap { position: relative; display: inline-block; }
+.share-menu { min-width: 200px; z-index: 40; text-align: start; }
+.share-menu.up { top: auto; bottom: calc(100% + 8px); }
+.share-wrap-foot { line-height: 1.2; }
+.web-foot .nowrap { white-space: nowrap; }
+.share-menu .lang-item { white-space: nowrap; }
+.share-menu .lang-item.done { color: var(--brand); }

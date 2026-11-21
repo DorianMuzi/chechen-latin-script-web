@@ -88,44 +88,67 @@
       position: relative;
       background: var(--banner-bg);
       border-radius: 16px;
-      padding: 13px 16px;
+      padding: 13px 10px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 5px;
       box-shadow: 0 2px 8px rgba(20,40,20,.08);
     }
     .banner-title {
       display: flex;
       align-items: baseline;
-      gap: 8px;
+      gap: 6px;
       flex: 1;
       min-width: 0;
     }
 
     /* logo vectoriel (flèches fines d'origine) : couleurs thémables */
-    .banner .logo { width: 34px; height: 28px; margin: 0 6px 0 4px; display: block; flex: none; align-self: center; overflow: visible; }
+    .banner .logo { width: 34px; height: 28px; margin: 0 4px 0 2px; display: block; flex: none; align-self: center; overflow: visible; }
     .banner .logo .lg { stroke: var(--logo-g); }
     .banner .logo .lt { stroke: var(--logo-t); }
-    /* pied de page : version + sélecteur de thème à trois positions (automatique / clair / sombre), le curseur glisse */
+    /* pied de page : version seule (le thème est dans la bannière) */
+    /* Exclusion par site (2.6) : ligne fine sous les boutons de page (elle concerne CE site, pas un réglage général) ;
+       la liste des sites désactivés est dans le bloc « À propos ». */
+    .site-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 12px 4px 0; }
+    .site-row[hidden] { display: none; }
+    .site-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+    .site-label { font: 600 13.5px 'Hanken Grotesk', sans-serif; color: var(--n-text2); }
+    .site-host { font: 500 12px/1.2 'Hanken Grotesk', sans-serif; color: var(--n-text3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; direction: ltr; text-align: start; }
+    .site-row .toggle-track { width: 40px; height: 24px; border-radius: 12px; }
+    .site-row .toggle-knob { width: 18px; height: 18px; }
+    .site-row .toggle.on .toggle-knob { transform: translateX(16px); }
+    .site-row .toggle:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; border-radius: 12px; }
+    html.panel .site-row { order: 5; }
+    .site-list-box { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--n-line); }
+    .site-list-box[hidden] { display: none; }
+    .site-list-title { font: 600 13px 'Hanken Grotesk', sans-serif; color: var(--n-text3); }
+    .site-list { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+    .site-list li { display: flex; align-items: center; justify-content: space-between; gap: 8px; font: 500 13px 'Hanken Grotesk', sans-serif; color: var(--n-text); padding: 4px 2px; }
+    .site-list li span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; direction: ltr; }
+    .site-list button { flex: none; border: 1px solid var(--n-line2); background: var(--n-surface); color: var(--link); border-radius: 8px; padding: 3px 9px; cursor: pointer; font: 600 12px 'Hanken Grotesk', sans-serif; }
+    .site-list button:hover { border-color: var(--accent-border); background: var(--chip-bg); }
+    .site-list button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
     .foot-row { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 15px; flex-wrap: wrap; }
     .foot-row .version { margin-top: 0; }
-    .theme-seg {
-      position: relative; display: inline-grid; grid-template-columns: repeat(3, 34px); direction: ltr; --i: 0;
-      padding: 2px; border: 1px solid var(--n-line2); background: var(--n-surface); border-radius: 999px;
+    /* Thème : icône dans la bannière (à côté de la langue), menu à trois choix. Le menu réutilise le style du menu de langue. */
+    .theme-wrap { position: relative; flex: none; }
+    .theme-btn {
+      width: 26px; height: 26px; padding: 0; border-radius: 50%;
+      border: 1px solid var(--n-glass-border); background: var(--n-glass);
+      color: var(--n-text2); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+      transition: background .2s, color .2s, border-color .2s;
     }
-    .theme-seg .thumb {
-      position: absolute; top: 2px; left: 2px; width: 34px; height: 28px; box-sizing: border-box; border-radius: 999px;
-      background: var(--chip-bg); border: 1px solid var(--accent-border);
-      transform: translateX(calc(var(--i) * 34px)); transition: transform .22s cubic-bezier(.4, .1, .2, 1);
-    }
-    .theme-seg button {
-      position: relative; z-index: 1; height: 28px; padding: 0; border: 0; background: transparent; border-radius: 999px;
-      color: var(--n-text3); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: color .15s;
-    }
-    .theme-seg button svg { width: 15px; height: 15px; display: block; }
-    .theme-seg button:hover, .theme-seg button[aria-checked="true"] { color: var(--link); }
-    .theme-seg button:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
-    @media (prefers-reduced-motion: reduce) { .theme-seg .thumb { transition: none; } }
+    .theme-btn svg { width: 15px; height: 15px; display: block; }
+    /* zone de clic élargie sans changer l'apparence (comme le bouton « i ») */
+    .theme-btn { position: relative; }
+    .theme-btn::after { content: ""; position: absolute; inset: -3px; }
+    .theme-btn:hover, .theme-btn[aria-expanded="true"] { color: var(--link); border-color: var(--accent-border); background: var(--accent-tint); }
+    .theme-btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+    .theme-menu { min-width: 170px; }
+    .theme-item svg.ti { width: 16px; height: 16px; flex: none; color: var(--n-text2); }
+    .theme-item[aria-checked="true"] svg.ti { color: var(--brand-deep); }
     html.panel .foot-row { order: 6; }
     .banner img {
       width: 46px;
@@ -357,8 +380,8 @@
     /* ---- Sélecteur de langue (dans la bannière) ---- */
     .lang-wrap { position: relative; flex: none; }
     .lang-btn {
-      display: flex; align-items: center; gap: 5px;
-      height: 28px; padding: 0 7px 0 6px; border-radius: 14px;
+      display: flex; align-items: center; gap: 4px;
+      height: 28px; padding: 0 6px 0 5px; border-radius: 14px;
       border: 1px solid var(--n-glass-border); background: var(--n-glass);
       color: var(--n-text2); cursor: pointer;
       font: 700 13px/1 'Hanken Grotesk', sans-serif; letter-spacing: .04em;
@@ -366,7 +389,7 @@
       transition: background .2s, color .2s, border-color .2s;
     }
     .lang-btn:hover, .lang-btn[aria-expanded="true"] { color: var(--link); border-color: var(--accent-border); background: var(--accent-tint); }
-    .lang-btn svg { transition: transform .2s; }
+    .lang-btn svg { transition: transform .2s; width: 10px; height: 10px; }
     .lang-btn .flag { width: 20px; height: 14px; }
     .lang-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
     .lang-btn:focus-visible, .info-btn:focus-visible, .btn-expand:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
@@ -392,7 +415,7 @@
 
     /* ---- Bannière étroite (panneau latéral) : le nom s'abrège selon la place réellement disponible ---- */
     .banner-title { container-type: inline-size; overflow: hidden; }
-    @container (max-width: 243px) { .name-script { display: none; } }
+    @container (max-width: 237px) { .name-script { display: none; } }
     @container (max-width: 140px) { .name-cap { display: none; } }
 
     /* ---- Mode panneau latéral : même page, largeur libre ---- */
@@ -502,6 +525,8 @@
       transition: filter .15s;
     }
     .btn-primary:hover { filter: brightness(1.05); }
+    .btn-primary:disabled { opacity: .45; cursor: not-allowed; filter: grayscale(.4); }
+    .btn-primary:disabled:hover { filter: grayscale(.4); }
     .btn-secondary {
       flex: 1; border: 1px solid var(--n-line2); border-radius: 14px; padding: 14px;
       background: var(--n-surface); color: var(--n-text2); font: 600 15px 'Hanken Grotesk', sans-serif; cursor: pointer;
@@ -750,7 +775,8 @@ body.web .out-panel {
 body.web .out-head { margin-bottom: 8px; }
 body.web .out-head .lat { font-size: 13px; color: var(--accent-strong); letter-spacing: .14em; }
 body.web #output { max-height: none; overflow-y: visible; font: 700 clamp(20px, 5vw, 25px)/1.5 'Noto Sans', sans-serif; color: var(--accent-strong); }
-body.web .out-actions { gap: 8px; }
+body.web .out-head { flex-wrap: wrap; gap: 8px; }
+body.web .out-actions { gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 body.web .out-panel .btn-copy {
   padding: 8px 14px; border-radius: 999px; font-size: 13px; font-weight: 700;
   border: 1.5px solid var(--accent-border); background: var(--btn-soft); color: var(--accent);
@@ -833,6 +859,7 @@ body.web .banner .logo { width: 64px; height: 52px; margin: 0 6px 0 2px; }
   body.web .banner .name-cap { font-size: 15px; letter-spacing: .06em; }
   body.web .banner .name-script { font-size: 21px; }
   body.web .lang-btn { height: 32px; padding: 0 8px 0 7px; }
+  body.web .out-panel .btn-copy { padding: 7px 11px; }
   body.web .lang-btn #langCode { display: none; } /* sur téléphone : drapeau seul (le nom de la langue est dans le menu) */
   body.web .card-transcriber { padding: 16px; border-radius: 20px; }
   body.web textarea#input { font-size: 19px; }
@@ -842,3 +869,35 @@ body.web .banner .logo { width: 64px; height: 52px; margin: 0 6px 0 2px; }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
+
+/* ---- Sélecteur de thème (automatique / clair / sombre) : propre au site ----
+   (l'extension a maintenant une icône dans sa bannière ; ces règles ne viennent donc plus du style de la popup) */
+.theme-seg {
+  position: relative; display: inline-grid; grid-template-columns: repeat(3, 34px); direction: ltr; --i: 0;
+  padding: 2px; border: 1px solid var(--n-line2); background: var(--n-surface); border-radius: 999px;
+}
+.theme-seg .thumb {
+  position: absolute; top: 2px; left: 2px; width: 34px; height: 28px; box-sizing: border-box; border-radius: 999px;
+  background: var(--chip-bg); border: 1px solid var(--accent-border);
+  transform: translateX(calc(var(--i) * 34px)); transition: transform .22s cubic-bezier(.4, .1, .2, 1);
+}
+.theme-seg button {
+  position: relative; z-index: 1; height: 28px; padding: 0; border: 0; background: transparent; border-radius: 999px;
+  color: var(--n-text3); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: color .15s;
+}
+.theme-seg button svg { width: 15px; height: 15px; display: block; }
+.theme-seg button:hover, .theme-seg button[aria-checked="true"] { color: var(--link); }
+.theme-seg button:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+@media (prefers-reduced-motion: reduce) { .theme-seg .thumb { transition: none; } }
+
+/* le nom « Latin Script » du bandeau de l'extension se masque à 237 px ; sur le site, c'est à 205 px (règle plus haut) */
+@container (min-width: 206px) { body.web .banner .name-script { display: block; } }
+
+/* ---- Partage : menu sous le bouton « Partager » (résultat) et sous « Partager le projet » (pied de page) ---- */
+.share-wrap { position: relative; display: inline-block; }
+.share-menu { min-width: 200px; z-index: 40; text-align: start; }
+.share-menu.up { top: auto; bottom: calc(100% + 8px); }
+.share-wrap-foot { line-height: 1.2; }
+.web-foot .nowrap { white-space: nowrap; }
+.share-menu .lang-item { white-space: nowrap; }
+.share-menu .lang-item.done { color: var(--brand); }

@@ -73,7 +73,8 @@ write(path.join(DOCS, 'styles.css'),
   '/* Généré par tools/build.cjs : style de la popup de l\'extension + tools/web.css */\n' + style + '\n' + read(path.join(TOOLS, 'web.css')));
 
 // ---- page : le sélecteur de langue et le bloc « Lettres latines » sont repris de la popup
-const langWrap = take(/(<div class="lang-wrap">[\s\S]*?)\n    <button id="infoBtn"/, popupHtm, 'sélecteur de langue')[1].replace(/\s+$/, '');
+// (le bouton de thème de l'extension, dans la bannière juste après la langue, n'est PAS repris : le site a son propre sélecteur de thème)
+const langWrap = take(/(<div class="lang-wrap">[\s\S]*?)\n    <div class="theme-wrap">/, popupHtm, 'sélecteur de langue')[1].replace(/\s+$/, '');
 const alpha = take(/(    <!-- Alphabet latin[\s\S]*?<\/div>\n)  <\/div>\n\n  <!-- Auto toggle/, popupHtm, 'palette')[1].replace(/\s+$/, '');
 let html = read(path.join(TOOLS, 'index.template.html'));
 html = html.replace('<!--LANGWRAP-->', () => langWrap).replace('<!--ALPHA-->', () => alpha);

@@ -69,6 +69,7 @@
   ['input', 'lblCyr', 'lblLat', 'lblMisal', 'lblCopy', 'misalHint', 'outBlock', 'output', 'btnCopy', 'sub', 'privacy',
    'verFoot', 'lblLicense', 'lblContact', 'aboutLicense', 'aboutContact', 'privacyLink', 'themeSeg',
    'btnReport', 'lblReport', 'btnReportProblem', 'reportNote',
+   'btnShare', 'lblShare', 'shareMenu', 'btnShareProject', 'shareMenuProject',
    'langBtn', 'langMenu', 'langFlag', 'langCode',
    'alphaToggle', 'lblAlpha', 'alphaBody', 'latInput', 'alphaKeys', 'alphaShift', 'alphaClear', 'alphaCopy', 'lblAlphaCopy'
   ].forEach(function (id) { el[id] = document.getElementById(id); });
@@ -180,6 +181,7 @@
     el.reportNote.textContent = REPORT_NOTE[state.lang] || REPORT_NOTE.en;
     el.lblReport.textContent = t.report;
     el.btnReportProblem.textContent = t.reportProblem;
+    updateShareUI();
     // En tchétchène, « Versi » se place après le numéro
     el.verFoot.textContent = state.lang === 'ce' ? WEB_VERSION + ' ' + t.aboutVersion : t.aboutVersion + ' ' + WEB_VERSION;
     el.verFoot.title = 'engine ' + (window.CLS_ENGINE_VERSION || '');
@@ -204,6 +206,7 @@
   }
 
   function openLangMenu() {
+    closeShareMenu(false);
     el.langMenu.hidden = false;
     el.langBtn.setAttribute('aria-expanded', 'true');
     var current = el.langItems.filter(function (i) { return i.getAttribute('aria-checked') === 'true'; })[0] || el.langItems[0];
@@ -248,6 +251,9 @@
 
   // ---------- Convertisseur ----------
   function showOut(show) {
+    // le menu de partage déborde du bloc : tant que le résultat est affiché, rien n'est rogné (replié : masqué comme avant)
+    el.outBlock.style.overflow = show ? 'visible' : 'hidden';
+    if (!show) closeShareMenu(false);
     el.outBlock.style.maxHeight = show ? '100000px' : '0';
     el.outBlock.style.opacity = show ? '1' : '0';
     el.outBlock.style.marginTop = show ? '14px' : '0';
@@ -439,6 +445,188 @@
     if (persist) lsSet(LS.alpha, open ? '1' : '0');
   }
 
+  // ---------- Partage (2.7) ----------
+  // Rien n'est envoyé par le site : un clic ouvre la page de partage du service choisi dans un nouvel onglet (ou le menu de
+  // partage du téléphone), avec le texte déjà rempli ; la personne relit et envoie elle-même.
+  var PROJECT_URL = 'https://dorianmuzi.github.io/chechen-latin-script-web/';
+  var SHARE_LINK_MAX = 600;    // au-delà de ce nombre de lettres (texte d'origine), pas de lien « avec le texte » (adresse trop longue)
+  var SHARE_X_MAX = 220;       // X limite à 280 caractères, adresse comprise
+  var SHARE_IN_MAX = 4000;     // à la lecture d'un lien : on ignore tout ce qui dépasse
+  // ce : fournis par l'utilisateur. Autres langues : non relues par des locuteurs natifs.
+  var SHARE_STR = {
+    ce: { share: 'Deq̇a', link: 'Ẋaƶorg sẋaeca', project: 'Proekt deq̇a' },
+    en: { share: 'Share', link: 'Copy link', project: 'Share the project' },
+    fr: { share: 'Partager', link: 'Copier le lien', project: 'Partager le projet' },
+    ru: { share: 'Поделиться', link: 'Копировать ссылку', project: 'Поделиться проектом' },
+    de: { share: 'Teilen', link: 'Link kopieren', project: 'Projekt teilen' },
+    tr: { share: 'Paylaş', link: 'Bağlantıyı kopyala', project: 'Projeyi paylaş' },
+    es: { share: 'Compartir', link: 'Copiar enlace', project: 'Compartir el proyecto' },
+    ar: { share: 'مشاركة', link: 'نسخ الرابط', project: 'مشاركة المشروع' }
+  };
+  var shareOpen = null;        // { menu, button, kind }
+
+  function shareStr() { return SHARE_STR[state.lang] || SHARE_STR.en; }
+
+  // Lien « avec le texte » : le texte d'origine (UTF-8) en base64 adapté aux adresses, dans la partie après « # »
+  // (cette partie n'est jamais envoyée à un serveur).
+  function b64urlEncode(str) {
+    var bytes = new TextEncoder().encode(str), bin = '';
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+
+  function b64urlDecode(s) {
+    s = s.replace(/-/g, '+').replace(/_/g, '/');
+    while (s.length % 4) s += '=';
+    var bin = atob(s), bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+  }
+
+  // Texte contenu dans l'adresse (« #t=… »), ou '' s'il n'y en a pas ou s'il est invalide. Le texte n'est jamais interprété
+  // comme du code de page : il est seulement placé dans le champ de saisie (value).
+  function readSharedText() {
+    var m = /^#t=([A-Za-z0-9_-]+)$/.exec(window.location.hash || '');
+    if (!m || m[1].length > SHARE_IN_MAX) return '';
+    try { return b64urlDecode(m[1]).slice(0, 2000); } catch (e) { return ''; }
+  }
+
+  function shareData(kind) {
+    if (kind === 'project') {
+      var t = T[state.lang] || T[DEFAULT_LANGUAGE];
+      return { text: 'Chechen Latin Script — ' + t.sub, url: PROJECT_URL, link: PROJECT_URL, facebook: true };
+    }
+    var result = (el.output.textContent || '').trim();
+    var source = (el.input.value || '').trim();
+    // Facebook ne reprend pas de texte libre (seulement une adresse) : absent du partage d'un résultat
+    return { text: result, url: PROJECT_URL, link: (source && source.length <= SHARE_LINK_MAX) ? PROJECT_URL + '#t=' + b64urlEncode(source) : '', facebook: false };
+  }
+
+  function shareItems(kind) {
+    var d = shareData(kind), q = encodeURIComponent, s = shareStr(), items = [];
+    var xText = d.text.length > SHARE_X_MAX ? d.text.slice(0, SHARE_X_MAX - 1).replace(/\s+$/, '') + '…' : d.text;
+    items.push({ id: 'telegram', label: 'Telegram', href: 'https://t.me/share/url?url=' + q(d.url) + '&text=' + q(d.text) });
+    items.push({ id: 'whatsapp', label: 'WhatsApp', href: 'https://wa.me/?text=' + q(d.text + '\n' + d.url) });
+    items.push({ id: 'x', label: 'X', href: 'https://x.com/intent/post?text=' + q(xText) + '&url=' + q(d.url) });
+    if (d.facebook) items.push({ id: 'facebook', label: 'Facebook', href: 'https://www.facebook.com/sharer/sharer.php?u=' + q(d.url) });
+    if (d.link) items.push({ id: 'copy', label: s.link, copy: d.link });
+    return items;
+  }
+
+  // Téléphone / tablette : le menu de partage du système (il propose Instagram, Telegram, WhatsApp…). Ordinateur : nos boutons.
+  function nativeShareWanted() {
+    return !!(navigator.share && window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+  }
+
+  function closeShareMenu(returnFocus) {
+    if (!shareOpen) return;
+    var o = shareOpen;
+    shareOpen = null;
+    o.menu.hidden = true;
+    o.menu.style.transform = '';
+    o.button.setAttribute('aria-expanded', 'false');
+    if (returnFocus) o.button.focus();
+  }
+
+  // Le menu s'ouvre vers le bas (résultat) ou vers le haut (pied de page), et passe de l'autre côté s'il manque de place ;
+  // il est aussi recentré s'il dépasse à gauche ou à droite.
+  function placeShareMenu(menu, button) {
+    menu.style.transform = '';
+    var wantUp = menu.getAttribute('data-up') === '1';
+    menu.classList.toggle('up', wantUp);
+    var h = menu.offsetHeight, b = button.getBoundingClientRect();
+    var below = window.innerHeight - b.bottom, above = b.top;
+    if (wantUp && above < h + 8 && below > above) menu.classList.remove('up');
+    else if (!wantUp && below < h + 8 && above > below) menu.classList.add('up');
+    var r = menu.getBoundingClientRect(), vw = document.documentElement.clientWidth, dx = 0;
+    if (r.right > vw - 8) dx = vw - 8 - r.right;
+    if (r.left + dx < 8) dx = 8 - r.left;
+    if (dx) menu.style.transform = 'translateX(' + Math.round(dx) + 'px)';
+  }
+
+  function openShareMenu(kind, button, menu) {
+    closeShareMenu(false);
+    closeLangMenu(false);
+    menu.textContent = '';
+    shareItems(kind).forEach(function (it) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'lang-item share-item';
+      b.setAttribute('role', 'menuitem');
+      b.setAttribute('data-share', it.id);
+      var name = document.createElement('span');
+      name.className = 'lang-name';
+      name.textContent = (it.copy ? '⧉ ' : '') + it.label;
+      b.appendChild(name);
+      b.addEventListener('click', function () {
+        if (it.copy) {
+          copyText(it.copy, b);
+          setTimeout(function () { closeShareMenu(true); }, 700);
+        } else {
+          window.open(it.href, '_blank', 'noopener,noreferrer');
+          closeShareMenu(false);
+        }
+      });
+      menu.appendChild(b);
+    });
+    menu.hidden = false;
+    button.setAttribute('aria-expanded', 'true');
+    shareOpen = { menu: menu, button: button, kind: kind };
+    placeShareMenu(menu, button);
+    var first = menu.querySelector('.share-item');
+    if (first) first.focus();
+  }
+
+  function onShareClick(kind, button, menu) {
+    if (shareOpen && shareOpen.menu === menu) { closeShareMenu(false); return; }
+    var d = shareData(kind);
+    if (!d.text) return;
+    if (nativeShareWanted()) {
+      var data = { title: 'Chechen Latin Script', text: d.text, url: d.url };
+      try { navigator.share(data).catch(function () { /* annulé par la personne */ }); } catch (e) { /* menu du système indisponible */ }
+      return;
+    }
+    openShareMenu(kind, button, menu);
+  }
+
+  function updateShareUI() {
+    var s = shareStr();
+    el.lblShare.textContent = s.share;
+    el.btnShareProject.textContent = s.project;
+    var lbl = s.share;
+    el.btnShare.title = lbl;
+    el.btnShare.setAttribute('aria-label', lbl);
+    el.btnShareProject.title = s.project;
+    closeShareMenu(false);
+  }
+
+  function initShare() {
+    el.btnShare.addEventListener('click', function () { onShareClick('result', el.btnShare, el.shareMenu); });
+    el.btnShareProject.addEventListener('click', function () { onShareClick('project', el.btnShareProject, el.shareMenuProject); });
+    [el.shareMenu, el.shareMenuProject].forEach(function (menu) {
+      menu.addEventListener('keydown', function (e) {
+        var items = Array.prototype.slice.call(menu.querySelectorAll('.share-item'));
+        var i = items.indexOf(document.activeElement), n = items.length;
+        if (!n) return;
+        if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % n].focus(); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); items[(i - 1 + n) % n].focus(); }
+        else if (e.key === 'Home') { e.preventDefault(); items[0].focus(); }
+        else if (e.key === 'End') { e.preventDefault(); items[n - 1].focus(); }
+        else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeShareMenu(true); }
+        else if (e.key === 'Tab') { closeShareMenu(false); }
+      });
+    });
+    [el.btnShare, el.btnShareProject].forEach(function (b) {
+      b.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowDown' && !shareOpen) { e.preventDefault(); b.click(); }
+      });
+    });
+    document.addEventListener('click', function (e) {
+      if (shareOpen && !e.target.closest('.share-wrap')) closeShareMenu(false);
+    });
+    window.addEventListener('resize', function () { if (shareOpen) placeShareMenu(shareOpen.menu, shareOpen.button); });
+  }
+
   // ---------- Mesure d'audience anonyme (GoatCounter), seulement si un code de site est configuré ----------
   // Aucun cookie. Ne compte rien : sur un poste local ou un fichier, si le navigateur envoie « Ne pas me suivre » (DNT)
   // ou « Global Privacy Control ». Le texte saisi n'est jamais transmis : le compteur ne voit que la visite de la page.
@@ -471,6 +659,7 @@
     buildAlphabet();
     applyLanguage(pickInitialLang());
     initLangMenu();
+    initShare();
     initThemeSeg();
     applyTheme(lsGet(THEME_CACHE_KEY));
 
@@ -499,6 +688,15 @@
     // brouillon de la dernière visite
     var draft = lsGet(LS.draft);
     if (draft) { el.input.value = draft; }
+    // lien reçu avec un texte (« #t=… ») : il remplace le brouillon ; l'adresse est nettoyée ensuite
+    var shared = readSharedText();
+    if (shared) {
+      el.input.value = shared;
+      lsSet(LS.draft, shared);
+    }
+    if (/^#t=/.test(window.location.hash || '')) {
+      try { window.history.replaceState(null, '', window.location.pathname + window.location.search); } catch (e) { /* adresse inchangée */ }
+    }
     autoResize();
     run();
 
