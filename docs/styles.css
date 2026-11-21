@@ -478,6 +478,18 @@
     .alpha-field-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
     .alpha-field-actions .btn-copy { padding: 2px 0; }
     .alpha-field-actions .btn-copy.done { color: var(--link); }
+    /* Écrire en latin → cyrillique (2.8) : résultat sous le champ « Lettres latines » ; les mots douteux se changent au clic */
+    .rev-block { margin-top: 10px; border: 1px solid var(--accent-border); background: var(--accent-tint); border-radius: 12px; padding: 8px 12px 10px; }
+    .rev-block[hidden] { display: none; }
+    .rev-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+    .rev-head .lat { font: 600 12px/1 'Hanken Grotesk', sans-serif; letter-spacing: .10em; text-transform: uppercase; color: var(--link); }
+    .rev-head .btn-copy { padding: 2px 0; }
+    .rev-head .btn-copy.done { color: var(--link); }
+    #revOut { font: 600 18px/1.5 'Noto Sans', sans-serif; color: var(--accent-strong); overflow-wrap: anywhere; }
+    .rev-w { cursor: pointer; border-radius: 5px; transition: background .12s; }
+    .rev-w:hover { background: var(--chip-bg); }
+    .rev-w:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+    .rev-doubt { text-decoration: underline dotted; text-decoration-thickness: 2px; text-underline-offset: 4px; }
     .alpha-tools { display: flex; align-items: center; gap: 12px; }
     .alpha-shift {
       min-width: 34px; height: 30px; border: 1px solid var(--n-line2); background: var(--n-surface); border-radius: 9px; cursor: pointer;

@@ -16,7 +16,7 @@
 
 // Author: MUZIŊ Darr
 //
-// PROTOTYPE (2.7) : écrire en latin 1992 → obtenir le cyrillique tchétchène (sens inverse du moteur).
+// Écrire en latin 1992 → obtenir le cyrillique tchétchène (sens inverse du moteur) : 2.8 (extension) et site web (le site copie ce fichier).
 // Le latin 1992 perd de l'information : « ş » vient de ш ou de щ, « i » de и ou de ы, « e » de е ou de э, « y+a » de я ou de й+а,
 // « n » et « ŋ » de н, et le signe « ь » seul disparaît. Ce convertisseur choisit donc un résultat PAR DÉFAUT (options ci-dessous,
 // réglées d'après un texte réel : voir le rapport de validation) et corrige les mots irréguliers connus du moteur

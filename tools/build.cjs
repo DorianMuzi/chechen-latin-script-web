@@ -37,8 +37,8 @@ copy(path.join(EXT, 'transliterate.js'), path.join(DOCS, 'engine', 'transliterat
 // partage : logique commune (adresses des services, lien avec le texte) reprise de l'extension
 copy(path.join(EXT, 'share.js'), path.join(DOCS, 'share.js'));
 copy(path.join(TOOLS, 'shim.js'), path.join(DOCS, 'engine', 'shim.js'));
-// écrire en latin -> cyrillique (prototype 2.7) : convertisseur inverse propre au site
-copy(path.join(TOOLS, 'reverse.js'), path.join(DOCS, 'reverse.js'));
+// écrire en latin -> cyrillique : convertisseur inverse, commun avec l'extension (2.8) : copié depuis son dossier
+copy(path.join(EXT, 'reverse.js'), path.join(DOCS, 'reverse.js'));
 const FILES = ['replacements.txt', 'special_words.txt', 'special_e_words.txt', 'special_n_words.txt'];
 const data = {};
 FILES.forEach((f) => { data[f] = read(path.join(EXT, f)); });

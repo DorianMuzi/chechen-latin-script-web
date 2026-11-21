@@ -727,7 +727,7 @@
     });
     el.alphaShift.addEventListener('click', function () { setAlphaShift(!state.shift); });
     el.alphaCopy.addEventListener('click', function () { copyText(el.latInput.value, el.alphaCopy); });
-    el.alphaClear.addEventListener('click', function () { el.latInput.value = ''; el.latInput.focus(); });
+    el.alphaClear.addEventListener('click', function () { el.latInput.value = ''; el.latInput.focus(); updateReverse(); });
 
     // palette : ouverte par défaut sur grand écran, repliée sur téléphone (le choix de la personne est mémorisé)
     var savedOpen = lsGet(LS.alpha);
