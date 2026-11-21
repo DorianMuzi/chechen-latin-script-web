@@ -472,7 +472,7 @@
     .alpha-field { border: 1px solid var(--n-line); background: var(--n-surface2); border-radius: 12px; padding: 8px 10px; }
     textarea#latInput {
       width: 100%; border: none; outline: none; resize: none; background: transparent; display: block;
-      font: 700 16px/1.5 'Noto Sans', sans-serif; color: var(--accent-strong); min-height: 48px; max-height: 120px;
+      font: 400 16px/1.5 'Noto Sans', sans-serif; color: var(--accent-strong); min-height: 48px; max-height: 120px;
       scrollbar-width: thin; scrollbar-color: var(--n-scroll) transparent;
     }
     .alpha-field-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
@@ -827,7 +827,7 @@ body.web .alpha-toggle:hover { background: var(--accent-tint); color: var(--bran
 body.web .alpha-toggle .alpha-glyph { font-size: 18px; width: 22px; }
 body.web .alpha-body { margin-top: 12px; }
 body.web .alpha-field { border: 2px solid var(--border-field); background: var(--surface-field); border-radius: 16px; padding: 10px 12px; }
-body.web textarea#latInput { font-size: 19px; font-weight: 700; color: var(--accent-strong); min-height: 52px; }
+body.web textarea#latInput { font-size: 19px; font-weight: 400; color: var(--accent-strong); min-height: 52px; }
 body.web .alpha-field-actions .btn-copy { font-weight: 700; }
 body.web .alpha-shift { height: 34px; min-width: 40px; border-radius: 10px; border-width: 1.5px; font-size: 17px; }
 body.web .alpha-keys { grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 8px; margin-top: 14px; }

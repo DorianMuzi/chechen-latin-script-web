@@ -92,7 +92,7 @@ const ck = (name, cond, extra) => { if (cond) { ok++; L('  OK   ' + name); } els
     await click(s, '#revCopy'); await sleep(200);
     ck('« Kopi yaŋ » du résultat copie le cyrillique', JSON.stringify(JSON.parse(await ev(s, 'JSON.stringify(window.__clip)'))) === JSON.stringify(['Нохчийн']));
     { const sh = await br.send('Page.captureScreenshot', { format: 'png' }, s); fs.writeFileSync(path.join(OUT, 'rev-desktop.png'), Buffer.from(sh.data, 'base64')); }
-    { const wt = JSON.parse(await ev(s, "JSON.stringify({lat:getComputedStyle(document.getElementById('latInput')).fontWeight,cyr:getComputedStyle(document.getElementById('revOut')).fontWeight})")); ck('le latin est en gras (700) et le cyrillique en police normale (400)', wt.lat === '700' && wt.cyr === '400', JSON.stringify(wt)); }
+    { const wt = JSON.parse(await ev(s, "JSON.stringify({lat:getComputedStyle(document.getElementById('latInput')).fontWeight,cyr:getComputedStyle(document.getElementById('revOut')).fontWeight})")); ck('ni le latin ni le cyrillique ne sont en gras (400)', wt.lat === '400' && wt.cyr === '400', JSON.stringify(wt)); }
     const lbl = await ev(s, "document.getElementById('lblRevCyr').textContent");
     ck('étiquette traduite (anglais : « Cyrillic »)', lbl === 'Cyrillic', lbl);
 
