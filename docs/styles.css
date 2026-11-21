@@ -963,3 +963,23 @@ body.web button, body.web a, body.web .alpha-key, body.web .rev-w { touch-action
 @supports (padding: max(0px)) {
   body.web { padding-bottom: env(safe-area-inset-bottom); }
 }
+
+/* ---- Téléphone : « dézoomer » (2.8.1) : tout le site est affiché à 85 % de sa taille sur un écran étroit, pour montrer plus de contenu ---- */
+@media (max-width: 480px) {
+  @supports (zoom: 1) {
+    body.web { zoom: .85; }
+    /* les zones à toucher gardent 44 px réels malgré le zoom (44 / 0,85 ≈ 52) */
+    .theme-seg { --sw: 56px; --sh: 52px; }
+    body.web .lang-btn { min-height: 52px; }
+    body.web .out-panel .btn-copy, body.web .alpha-field-actions .btn-copy { min-height: 52px; }
+    body.web .alpha-shift { min-width: 56px; height: 52px; }
+    body.web #alphaClear { min-width: 52px; min-height: 52px; }
+    body.web .misal-hint { min-height: 52px; }
+    body.web .lang-item { min-height: 54px; }
+    body.web .alpha-toggle { min-height: 56px; }
+    body.web .rev-w { padding: 13px 6px; margin: 0 -4px; }
+    body.web .web-foot a, body.web .web-link { padding: 20px 5px; }
+    body.web .alpha-keys { grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)); gap: 7px; margin-top: 12px; }
+    body.web .alpha-key { height: 49px; min-width: 42px; font-size: 20px; border-radius: 13px; }
+  }
+}
