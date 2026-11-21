@@ -205,7 +205,7 @@ body.web .alpha-toggle:hover { background: var(--accent-tint); color: var(--bran
 body.web .alpha-toggle .alpha-glyph { font-size: 18px; width: 22px; }
 body.web .alpha-body { margin-top: 12px; }
 body.web .alpha-field { border: 2px solid var(--border-field); background: var(--surface-field); border-radius: 16px; padding: 10px 12px; }
-body.web textarea#latInput { font-size: 19px; font-weight: 400; color: var(--accent-strong); min-height: 52px; }
+body.web textarea#latInput { font-size: 20px; font-weight: 400; color: var(--accent-strong); min-height: 52px; }
 body.web .alpha-field-actions .btn-copy { font-weight: 700; }
 body.web .alpha-shift { height: 34px; min-width: 40px; border-radius: 10px; border-width: 1.5px; font-size: 17px; }
 body.web .alpha-keys { grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 8px; margin-top: 14px; }
