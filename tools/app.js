@@ -10,7 +10,8 @@
 
   var I = window.CLS_I18N;
   var T = I.T, LANGS = I.LANGS, ALPHABET = I.ALPHABET;
-  var WEB_VERSION = '1.0.0';
+  // La version affichée suit celle du projet (numéro de l'extension dont le site reprend le moteur : injectée par tools/build.cjs)
+  var WEB_VERSION = window.CLS_ENGINE_VERSION || '1.0.0';
   var DEFAULT_LANGUAGE = 'ce';
   var EXAMPLE_TEXT = 'Нохчийн мотт — 1992 шарахь латинан абат.';
   var LS = { lang: 'cls_lang', draft: 'cls_draft', alpha: 'cls_alpha_open' };
@@ -448,76 +449,29 @@
   // ---------- Partage (2.7) ----------
   // Rien n'est envoyé par le site : un clic ouvre la page de partage du service choisi dans un nouvel onglet (ou le menu de
   // partage du téléphone), avec le texte déjà rempli ; la personne relit et envoie elle-même.
-  var PROJECT_URL = 'https://dorianmuzi.github.io/chechen-latin-script-web/';
-  var SHARE_LINK_MAX = 600;    // au-delà de ce nombre de lettres (texte d'origine), pas de lien « avec le texte » (adresse trop longue)
-  var SHARE_X_MAX = 220;       // X limite à 280 caractères, adresse comprise
-  var SHARE_IN_MAX = 4000;     // à la lecture d'un lien : on ignore tout ce qui dépasse
-  // ce : share / link / project fournis par l'utilisateur ; « more » = conversion par le moteur du mot « Кхин а » fourni dans
-  // le texte collé (à CONFIRMER par l'utilisateur, notamment le ŋ final). Autres langues : non relues par des locuteurs natifs.
-  var SHARE_STR = {
-    ce: { share: 'Deq̇a', link: 'Ẋaƶorg sẋaeca', project: 'Proekt deq̇a', more: 'Qiŋ a' },
-    en: { share: 'Share', link: 'Copy link', project: 'Share the project', more: 'More' },
-    fr: { share: 'Partager', link: 'Copier le lien', project: 'Partager le projet', more: 'Plus' },
-    ru: { share: 'Поделиться', link: 'Копировать ссылку', project: 'Поделиться проектом', more: 'Ещё' },
-    de: { share: 'Teilen', link: 'Link kopieren', project: 'Projekt teilen', more: 'Mehr' },
-    tr: { share: 'Paylaş', link: 'Bağlantıyı kopyala', project: 'Projeyi paylaş', more: 'Diğer' },
-    es: { share: 'Compartir', link: 'Copiar enlace', project: 'Compartir el proyecto', more: 'Más' },
-    ar: { share: 'مشاركة', link: 'نسخ الرابط', project: 'مشاركة المشروع', more: 'المزيد' }
-  };
+  // La logique (adresses des services, lien « avec le texte ») est dans share.js, COMMUN avec l'extension (copié depuis son
+  // dossier à la génération) ; les libellés (share, shareLink, shareProject, shareMore) viennent des textes de l'extension.
+  var SHARE = window.CLS_SHARE;
   var shareOpen = null;        // { menu, button, kind }
 
-  function shareStr() { return SHARE_STR[state.lang] || SHARE_STR.en; }
-
-  // Lien « avec le texte » : le texte d'origine (UTF-8) en base64 adapté aux adresses, dans la partie après « # »
-  // (cette partie n'est jamais envoyée à un serveur).
-  function b64urlEncode(str) {
-    var bytes = new TextEncoder().encode(str), bin = '';
-    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
-    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  function shareStr() {
+    var t = T[state.lang] || T[DEFAULT_LANGUAGE];
+    return { share: t.share, link: t.shareLink, project: t.shareProject, more: t.shareMore };
   }
 
-  function b64urlDecode(s) {
-    s = s.replace(/-/g, '+').replace(/_/g, '/');
-    while (s.length % 4) s += '=';
-    var bin = atob(s), bytes = new Uint8Array(bin.length);
-    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-    return new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+  function shareCtx() {
+    var t = T[state.lang] || T[DEFAULT_LANGUAGE];
+    return { source: el.input.value, result: el.output.textContent, tagline: t.sub };
   }
 
-  // Texte contenu dans l'adresse (« #t=… »), ou '' s'il n'y en a pas ou s'il est invalide. Le texte n'est jamais interprété
-  // comme du code de page : il est seulement placé dans le champ de saisie (value).
-  function readSharedText() {
-    var m = /^#t=([A-Za-z0-9_-]+)$/.exec(window.location.hash || '');
-    if (!m || m[1].length > SHARE_IN_MAX) return '';
-    try { return b64urlDecode(m[1]).slice(0, 2000); } catch (e) { return ''; }
-  }
-
-  function shareData(kind) {
-    if (kind === 'project') {
-      var t = T[state.lang] || T[DEFAULT_LANGUAGE];
-      return { text: 'Chechen Latin Script — ' + t.sub, url: PROJECT_URL, link: PROJECT_URL, facebook: true };
-    }
-    var result = (el.output.textContent || '').trim();
-    var source = (el.input.value || '').trim();
-    // Facebook ne reprend pas de texte libre (seulement une adresse) : absent du partage d'un résultat
-    return { text: result, url: PROJECT_URL, link: (source && source.length <= SHARE_LINK_MAX) ? PROJECT_URL + '#t=' + b64urlEncode(source) : '', facebook: false };
-  }
+  function shareData(kind) { return SHARE.data(kind, shareCtx()); }
 
   function shareItems(kind) {
-    var d = shareData(kind), q = encodeURIComponent, s = shareStr(), items = [];
-    var xText = d.text.length > SHARE_X_MAX ? d.text.slice(0, SHARE_X_MAX - 1).replace(/\s+$/, '') + '…' : d.text;
-    // Ordre : messageries d'abord (WhatsApp, Telegram), puis X (et Facebook pour le projet), « Copier le lien », « Plus ».
-    // Instagram et TikTok n'ont pas de lien de partage depuis un navigateur : ils passent par le menu du téléphone,
-    // par « Plus » ou par « Copier le lien ».
-    items.push({ id: 'whatsapp', label: 'WhatsApp', href: 'https://wa.me/?text=' + q(d.text + '\n' + d.url) });
-    items.push({ id: 'telegram', label: 'Telegram', href: 'https://t.me/share/url?url=' + q(d.url) + '&text=' + q(d.text) });
-    items.push({ id: 'x', label: 'X', href: 'https://x.com/intent/post?text=' + q(xText) + '&url=' + q(d.url) });
-    if (d.facebook) items.push({ id: 'facebook', label: 'Facebook', href: 'https://www.facebook.com/sharer/sharer.php?u=' + q(d.url) });
-    if (d.link) items.push({ id: 'copy', label: s.link, copy: d.link });
-    // « Plus » : le menu de partage du système (ordinateur seulement, et seulement si le navigateur le propose)
-    if (typeof navigator.share === 'function') items.push({ id: 'more', label: s.more, native: true });
-    return items;
+    var s = shareStr();
+    return SHARE.items(kind, shareCtx(), { link: s.link, more: s.more }, typeof navigator.share === 'function');
   }
+
+  function readSharedText() { return SHARE.readSharedText(window.location.hash); }
 
   // Téléphone / tablette : le menu de partage du système (il propose Instagram, Telegram, WhatsApp…). Ordinateur : nos boutons.
   function nativeShareWanted() {

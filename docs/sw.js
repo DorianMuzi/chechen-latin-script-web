@@ -1,5 +1,5 @@
 /* Généré par tools/build.cjs. Met le site en cache pour qu'il fonctionne hors ligne. */
-const CACHE = "cls-web-dac8ef7c34";
+const CACHE = "cls-web-143bc905e5";
 const FILES = [
   "./",
   "LICENSE",
@@ -40,6 +40,7 @@ const FILES = [
   "icons/logo-96.png",
   "index.html",
   "manifest.webmanifest",
+  "share.js",
   "styles.css"
 ];
 

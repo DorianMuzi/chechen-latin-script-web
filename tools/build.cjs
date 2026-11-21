@@ -34,6 +34,8 @@ const engineVersion = manifest.version;
 
 // ---- moteur + listes de mots
 copy(path.join(EXT, 'transliterate.js'), path.join(DOCS, 'engine', 'transliterate.js'));
+// partage : logique commune (adresses des services, lien avec le texte) reprise de l'extension
+copy(path.join(EXT, 'share.js'), path.join(DOCS, 'share.js'));
 copy(path.join(TOOLS, 'shim.js'), path.join(DOCS, 'engine', 'shim.js'));
 const FILES = ['replacements.txt', 'special_words.txt', 'special_e_words.txt', 'special_n_words.txt'];
 const data = {};
@@ -51,7 +53,8 @@ const LANGS = vm.runInNewContext('(' + take(/const LANGS = (\{[\s\S]*?\n\});/, p
 const ALPHABET = vm.runInNewContext('(' + take(/const ALPHABET = (\[[\s\S]*?\n\]);/, popupJs, 'ALPHABET')[1] + ')');
 // Les textes propres à l'extension (description, signalement, raccourcis…) ne sont pas repris
 const KEEP = ['sub', 'lang', 'cyr', 'lat', 'misal', 'copy', 'ph', 'report', 'reportProblem', 'aboutVersion', 'aboutLicense', 'aboutContact',
-  'alpha', 'alphaPh', 'alphaShift', 'alphaClear', 'alphaEng', 'alphaW', 'theme', 'themeAuto', 'themeLight', 'themeDark'];
+  'alpha', 'alphaPh', 'alphaShift', 'alphaClear', 'alphaEng', 'alphaW', 'theme', 'themeAuto', 'themeLight', 'themeDark',
+  'share', 'shareLink', 'shareProject', 'shareMore'];
 const T2 = {};
 Object.keys(T).forEach((l) => { T2[l] = {}; KEEP.forEach((k) => { if (!(k in T[l])) throw new Error('Clé manquante ' + l + '.' + k); T2[l][k] = T[l][k]; }); });
 // ---- formulaires de retour (un formulaire Google par langue) : repris de background.js de l'extension

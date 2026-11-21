@@ -98,7 +98,7 @@ const ck = (name, cond, extra) => { if (cond) { ok++; L('  OK   ' + name); } els
       ck('formulaire de la langue (français), interface Google en français', form.url.includes(fr) && /[?&]hl=fr/.test(form.url), form.url.slice(0, 120));
       const dec = decodeURIComponent(form.url.replace(/\+/g, ' '));
       ck('prérempli : type « Mauvaise translittération », texte source, résultat', dec.includes('entry.1685349041=Mauvaise translittération') && dec.includes('entry.1447841949=Нохчийн мотт') && dec.includes('entry.1248358464=Noxçiyŋ mott'), dec.slice(100, 400));
-      ck('prérempli : version « web 1.0.0 (engine … ) »', /entry\.315142135=web 1\.0\.0 \(engine \d+\.\d+\.\d+\)/.test(dec), dec.slice(-80));
+      ck('prérempli : version « web 1.0.0 (engine … ) »', /entry\.315142135=web \d+\.\d+\.\d+ \(engine \d+\.\d+\.\d+\)/.test(dec), dec.slice(-80));
       await br.send('Target.closeTarget', { targetId: form.targetId });
     }
     // sans texte : lien « Signaler un problème » -> type Bug, sans texte

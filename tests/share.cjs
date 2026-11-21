@@ -188,7 +188,7 @@ const unb64u = (s) => Buffer.from(s.replace(/-/g, '+').replace(/_/g, '/'), 'base
     await br.send('Target.closeTarget', { targetId: t.targetId });
 
     L('== 7. Huit langues, droite à gauche, petits écrans');
-    const EXPECT = { ce: ['Deq̇a', 'Proekt deq̇a', 'Ẋaƶorg sẋaeca'], en: ['Share', 'Share the project', 'Copy link'], fr: ['Partager', 'Partager le projet', 'Copier le lien'],
+    const EXPECT = { ce: ['Deq̇a', 'Proyekt deq̇a', 'Ẋaƶorg sẋaeca'], en: ['Share', 'Share the project', 'Copy link'], fr: ['Partager', 'Partager le projet', 'Copier le lien'],
       ru: ['Поделиться', 'Поделиться проектом', 'Копировать ссылку'], de: ['Teilen', 'Projekt teilen', 'Link kopieren'], tr: ['Paylaş', 'Projeyi paylaş', 'Bağlantıyı kopyala'],
       es: ['Compartir', 'Compartir el proyecto', 'Copiar enlace'], ar: ['مشاركة', 'مشاركة المشروع', 'نسخ الرابط'] };
     const MORE = { ce: 'Qi\u014B a', en: 'More', fr: 'Plus', ru: 'Ещё', de: 'Mehr', tr: 'Diğer', es: 'Más', ar: 'المزيد' };
