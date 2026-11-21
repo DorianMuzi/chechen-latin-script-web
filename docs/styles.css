@@ -954,8 +954,9 @@ body.web button, body.web a, body.web .alpha-key, body.web .rev-w { touch-action
   body.web .lang-item { min-height: 46px; }
   body.web .web-foot a, body.web .web-link { display: inline-block; padding: 14px 5px; }
   body.web .web-foot { line-height: 1.2; }
-  body.web .alpha-keys { grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 8px; }
-  body.web .alpha-key { height: 50px; min-width: 44px; }
+  /* touches de la palette : compactes comme un clavier (7 par rangée sur un téléphone courant), sans prendre tout l'écran */
+  body.web .alpha-keys { grid-template-columns: repeat(auto-fill, minmax(36px, 1fr)); gap: 6px; margin-top: 10px; }
+  body.web .alpha-key { height: 42px; min-width: 36px; font-size: 18px; border-radius: 11px; }
   body.web .misal-hint { min-height: 44px; }
   body.web .alpha-toggle { min-height: 48px; }
 }
