@@ -63,9 +63,17 @@
   }
 
   // Conversion « règles » d'un mot (minuscules, NFC)
-  function wordByRules(w, opt) {
+  // ov : choix imposés { numéro de lettre ambiguë → texte } ; meta : liste remplie avec les lettres ambiguës rencontrées
+  // { def : choix par défaut, alt : autre choix, doubt : le choix par défaut est incertain (mot sans doute emprunté au russe) }
+  function wordByRules(w, opt, ov, meta) {
     var o = opt || OPTIONS;
     var out = '';
+    var amb = -1;
+    function pick(def, alt, doubt) {
+      amb++;
+      if (meta) meta.push({ def: def, alt: alt, doubt: !!doubt });
+      return (ov && ov[amb] !== undefined) ? ov[amb] : def;
+    }
     var n = w.length;
     for (var i = 0; i < n; i++) {
       var c = w.charAt(i), nx = w.charAt(i + 1), nx2 = w.charAt(i + 2);
@@ -83,13 +91,14 @@
         case 'e': {
           var pv = i > 0 ? w.charAt(i - 1) : '';
           var afterVowel = pv !== '' && 'aeiou\u00E4\u00F6\u00FC\u0259'.indexOf(pv) >= 0;
-          out += start ? o.eInitial : (afterVowel && o.eAfterVowel) ? o.eAfterVowel : o.eMiddle;
+          var de = start ? o.eInitial : (afterVowel && o.eAfterVowel) ? o.eAfterVowel : o.eMiddle;
+          out += pick(de, de === 'э' ? 'е' : 'э', start);
           break;
         }
         case 'f': out += 'ф'; break;
         case 'g': out += 'г'; break;
         case 'h': out += 'х' + PALOCHKA; break;
-        case 'i': out += o.i; break;
+        case 'i': out += pick(o.i, o.i === 'и' ? 'ы' : 'и', false); break;
         case 'j': out += PALOCHKA; break;
         case 'k': out += 'к'; break;
         case 'l': out += 'л'; break;
@@ -112,13 +121,14 @@
           if (o.yMode === 'positional' && (nx === 'a' || nx === 'u' || nx === 'o')) {
             var prev = i > 0 ? w.charAt(i - 1) : '';
             var afterConsonant = prev !== '' && 'aeiouy\u00E4\u00F6\u00FC\u0259'.indexOf(prev) < 0;
-            if (afterConsonant) out += (nx === 'a' ? '\u044F' : nx === 'u' ? '\u044E' : '\u0451'); else out += '\u0439' + (nx === 'a' ? '\u0430' : nx === 'u' ? '\u0443' : '\u043E');
+            var soft = (nx === 'a' ? 'я' : nx === 'u' ? 'ю' : 'ё'), hard = 'й' + (nx === 'a' ? 'а' : nx === 'u' ? 'у' : 'о');
+            out += afterConsonant ? pick(soft, hard, true) : pick(hard, soft, false);
             i++;
           }
-          else if (nx === 'a') { out += o.ya; i++; }
-          else if (nx === 'u') { out += o.yu; i++; }
-          else if (nx === 'o') { out += o.yo; i++; }
-          else if (nx === 'e') { out += start ? o.yeInitial : o.yeMiddle; i++; }
+          else if (nx === 'a') { out += pick(o.ya, o.ya === 'я' ? 'йа' : 'я', false); i++; }
+          else if (nx === 'u') { out += pick(o.yu, o.yu === 'ю' ? 'йу' : 'ю', false); i++; }
+          else if (nx === 'o') { out += pick(o.yo, o.yo === 'ё' ? 'йо' : 'ё', false); i++; }
+          else if (nx === 'e') { var dy = start ? o.yeInitial : o.yeMiddle; out += pick(dy, dy === 'е' ? 'йе' : 'е', false); i++; }
           else if (nx === 'ä') { out += 'яь'; i++; }
           else if (nx === 'ü') { out += 'юь'; i++; }
           else out += 'й';
@@ -133,7 +143,7 @@
         case 'ṫ': out += 'т' + PALOCHKA; break;  // ṫ → тӀ
         case 'ƶ': out += 'ж'; break;             // ƶ → ж
         case 'ç': out += 'ч'; break;             // ç → ч
-        case 'ş': out += o.sh; break;                 // ş → ш
+        case 'ş': out += pick(o.sh, o.sh === 'ш' ? 'щ' : 'ш', true); break;                 // ş → ш
         case 'ŋ': out += 'н'; break;             // ŋ → н
         case 'ə': out += 'ъ'; break;             // ə → ъ
         default: out += c; break;
@@ -192,5 +202,43 @@
     return { text: res, words: words };
   }
 
-  root.CLS_REV = { OPTIONS: OPTIONS, init: init, convert: convert, convertWord: convertWord, wordByRules: wordByRules, size: function () { return Object.keys(dict).length; } };
+  // Résultat par défaut d'un mot + variantes (une lettre ambiguë changée à la fois) ; doubt = au moins un choix incertain
+  function analyse(lw, opt) {
+    var meta = [];
+    var base = wordByRules(lw, opt, null, meta);
+    var alts = [], doubt = false;
+    meta.forEach(function (m, k) {
+      if (m.doubt) doubt = true;
+      var ov = {}; ov[k] = m.alt;
+      var v = wordByRules(lw, opt, ov);
+      if (v !== base && alts.indexOf(v) < 0) alts.push(v);
+    });
+    return { out: base, alts: alts, doubt: doubt };
+  }
+
+  // Découpe le texte en morceaux pour l'interface : { text, word:false } pour ce qui n'est pas un mot latin, et pour un mot
+  // { text, word:true, src, key, variants:[…], idx, doubt, known }. choices : { mot latin en minuscules → cyrillique choisi }.
+  function tokens(text, choices, opt) {
+    var s = String(text || '').normalize('NFC'), res = [], last = 0;
+    var re = /[\p{Script=Latin}\u0300-\u036F]+(?:-[\p{Script=Latin}\u0300-\u036F]+)*/gu, m;
+    while ((m = re.exec(s)) !== null) {
+      if (m.index > last) res.push({ text: s.slice(last, m.index), word: false });
+      var w = m[0], lw = lower(w), hit = dict[lw];
+      if (hit !== undefined || lw.indexOf('-') >= 0) {
+        var r = convertWord(w, opt);
+        res.push({ text: r.out, word: true, src: w, key: lw, variants: [r.out], idx: 0, doubt: false, known: hit !== undefined });
+      } else {
+        var an = analyse(lw, opt);
+        var variants = [applyCase(w, an.out)].concat(an.alts.map(function (v) { return applyCase(w, v); }));
+        var idx = 0, ch = choices && choices[lw];
+        if (ch) { var k = variants.map(function (v) { return v.toLowerCase(); }).indexOf(String(ch).toLowerCase()); if (k >= 0) idx = k; }
+        res.push({ text: variants[idx], word: true, src: w, key: lw, variants: variants, idx: idx, doubt: an.doubt, known: false });
+      }
+      last = m.index + w.length;
+    }
+    if (last < s.length) res.push({ text: s.slice(last), word: false });
+    return res;
+  }
+
+  root.CLS_REV = { tokens: tokens, analyse: analyse, OPTIONS: OPTIONS, init: init, convert: convert, convertWord: convertWord, wordByRules: wordByRules, size: function () { return Object.keys(dict).length; } };
 })(typeof window !== 'undefined' ? window : this);

@@ -621,11 +621,46 @@
     copy.addEventListener('click', function () { copyText(rev.out.textContent, rev.copy); });
   }
 
+  // Mots douteux : un mot qui contient une lettre ambiguë (ş = ш ou щ, i = и ou ы, e = е ou э, y+voyelle = я ou йа…) devient
+  // cliquable (ou Entrée / Espace) et passe d'une variante à l'autre. Souligné en pointillés : les mots dont le choix par défaut
+  // est le moins sûr (ş, e initial, я/ю/ё après une consonne : mots empruntés au russe). Le choix est retenu pour ce mot tant que
+  // la page reste ouverte.
+  var revChoices = {};
+
+  function revTitle(tok) { return tok.variants.join('  ⇄  '); }
+
+  function renderReverse(focusOrdinal) {
+    var toks = window.CLS_REV.tokens(el.latInput.value, revChoices);
+    rev.out.textContent = '';
+    var ordinal = -1, toFocus = null;
+    toks.forEach(function (tok) {
+      if (!tok.word || tok.variants.length < 2) { rev.out.appendChild(document.createTextNode(tok.text)); return; }
+      ordinal++;
+      var span = document.createElement('span');
+      span.className = 'rev-w' + (tok.doubt ? ' rev-doubt' : '');
+      span.textContent = tok.text;
+      span.title = revTitle(tok);
+      span.setAttribute('role', 'button');
+      span.setAttribute('aria-label', tok.text + ' — ' + tok.variants.join(', '));
+      span.tabIndex = 0;
+      var me = ordinal;
+      var go = function () {
+        revChoices[tok.key] = tok.variants[(tok.idx + 1) % tok.variants.length].toLowerCase();
+        renderReverse(me);
+      };
+      span.addEventListener('click', go);
+      span.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+      if (me === focusOrdinal) toFocus = span;
+      rev.out.appendChild(span);
+    });
+    if (toFocus) toFocus.focus();
+  }
+
   function updateReverse() {
     if (!rev.block) return;
     var v = el.latInput.value;
     if (!v.trim()) { rev.block.hidden = true; rev.out.textContent = ''; return; }
-    rev.out.textContent = window.CLS_REV.convert(v).text;
+    renderReverse(-1);
     rev.block.hidden = false;
   }
 

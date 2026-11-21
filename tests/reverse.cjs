@@ -108,7 +108,56 @@ const ck = (name, cond, extra) => { if (cond) { ok++; L('  OK   ' + name); } els
       if (l === 'ru') { const sh = await br.send('Page.captureScreenshot', { format: 'png' }, s); fs.writeFileSync(path.join(OUT, 'rev-phone.png'), Buffer.from(sh.data, 'base64')); }
     }
     await br.send('Target.closeTarget', { targetId: t.targetId });
-    L('== 5. Erreurs');
+    L('== 5. Mots douteux : variantes au clic');
+    ({ t, s } = await open(URL_SITE, 1000, 900));
+    await ev(s, "document.querySelector('.lang-item[data-lang=\"en\"]').click()");
+    const tk = (x) => ev(s, `JSON.stringify(CLS_REV.tokens(${JSON.stringify(x)},{}).filter(t=>t.word).map(t=>({v:t.variants,d:t.doubt})))`).then(JSON.parse);
+    let r1 = await tk('şarax');
+    ck('« şarax » : ш par défaut, variante щ, choix signalé comme douteux', r1[0].v[0] === 'шарах' && r1[0].v.includes('щарах') && r1[0].d === true, JSON.stringify(r1));
+    r1 = await tk('ezar');
+    ck('« ezar » (e en début de mot) : эзар par défaut, variante езар, douteux', r1[0].v[0] === 'эзар' && r1[0].v.includes('езар') && r1[0].d === true, JSON.stringify(r1));
+    r1 = await tk('byudƶete');
+    ck('« byudƶete » (я/ю/ё après une consonne) : бюджете par défaut, douteux', r1[0].v[0] === 'бюджете' && r1[0].d === true, JSON.stringify(r1));
+    r1 = await tk('Noxçiyŋ');
+    ck('« Noxçiyŋ » : Нохчийн, variante Нохчыйн, mais PAS souligné (« i » = ы est rare)', r1[0].v[0] === 'Нохчийн' && r1[0].v.includes('Нохчыйн') && r1[0].d === false, JSON.stringify(r1));
+    r1 = await tk('mott');
+    ck('« mott » : aucune lettre ambiguë, une seule variante', r1[0].v.length === 1 && r1[0].d === false, JSON.stringify(r1));
+    r1 = await tk('vövza');
+    ck('mot du dictionnaire (« vövza ») : une seule variante, rien à choisir', r1[0].v.length === 1 && r1[0].v[0] === 'вевза', JSON.stringify(r1));
+    r1 = await tk('Adan-Yahuŋ');
+    ck('mot à trait d\'union connu du dictionnaire : une seule variante', r1[0].v.length === 1, JSON.stringify(r1));
+    await ev(s, "document.getElementById('alphaToggle').getAttribute('aria-expanded')==='true'||document.getElementById('alphaToggle').click();1"); await sleep(300);
+    await lat(s, 'şarax mott ezar Noxçiyŋ');
+    const sp = JSON.parse(await ev(s, "JSON.stringify({n:document.querySelectorAll('#revOut .rev-w').length,d:document.querySelectorAll('#revOut .rev-doubt').length,t:[...document.querySelectorAll('#revOut .rev-w')].map(x=>x.textContent),ti:document.querySelector('#revOut .rev-w').title,txt:document.getElementById('revOut').textContent})"));
+    ck('trois mots cliquables (şarax, ezar, Noxçiyŋ), deux soulignés ; « mott » reste du texte simple', sp.n === 3 && sp.d === 2 && sp.t.join() === 'шарах,эзар,Нохчийн' && sp.txt === 'шарах мотт эзар Нохчийн', JSON.stringify(sp));
+    ck('l\'infobulle du mot liste ses variantes', /шарах/.test(sp.ti) && /щарах/.test(sp.ti), sp.ti);
+    { const sh = await br.send('Page.captureScreenshot', { format: 'png' }, s); fs.writeFileSync(path.join(OUT, 'rev-alt.png'), Buffer.from(sh.data, 'base64')); }
+    await click(s, '#revOut .rev-w');
+    let st = JSON.parse(await ev(s, "JSON.stringify({txt:document.getElementById('revOut').textContent,first:document.querySelector('#revOut .rev-w').textContent})"));
+    ck('clic sur « шарах » : il devient « щарах » ; le reste ne bouge pas', st.first === 'щарах' && st.txt === 'щарах мотт эзар Нохчийн', JSON.stringify(st));
+    await click(s, '#revOut .rev-w'); st = JSON.parse(await ev(s, "JSON.stringify({first:document.querySelector('#revOut .rev-w').textContent})"));
+    ck('un second clic revient à « шарах » (le choix tourne)', st.first === 'шарах', JSON.stringify(st));
+    await click(s, '#revOut .rev-w');   // щарах
+    await lat(s, 'şarax mott ezar Noxçiyŋ ya şarax');
+    st = JSON.parse(await ev(s, "JSON.stringify({txt:document.getElementById('revOut').textContent})"));
+    ck('le choix est retenu quand on continue d\'écrire et vaut pour chaque occurrence du mot', st.txt === 'щарах мотт эзар Нохчийн йа щарах', JSON.stringify(st));
+    await ev(s, "[...document.querySelectorAll('#revOut .rev-w')][1].focus()");
+    await br.send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, text: '\r' }, s);
+    await br.send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13 }, s); await sleep(300);
+    st = JSON.parse(await ev(s, "JSON.stringify({txt:document.getElementById('revOut').textContent,focus:document.activeElement.textContent})"));
+    ck('clavier : Entrée sur « эзар » donne « езар » et le focus reste sur le mot', /езар/.test(st.txt) && st.focus === 'езар', JSON.stringify(st));
+    await ev(s, "window.__clip=[];navigator.clipboard.writeText=(x)=>{window.__clip.push(x);return Promise.resolve()};1");
+    await click(s, '#revCopy'); await sleep(200);
+    ck('« Kopi yaŋ » copie le texte avec les choix faits', JSON.parse(await ev(s, 'JSON.stringify(window.__clip)'))[0] === 'щарах мотт езар Нохчийн йа щарах');
+    await br.send('Target.closeTarget', { targetId: t.targetId });
+    ({ t, s } = await open(URL_SITE, 375, 700, true));
+    await ev(s, "localStorage.clear();1");
+    await ev(s, "document.getElementById('alphaToggle').getAttribute('aria-expanded')==='true'||document.getElementById('alphaToggle').click();1"); await sleep(300);
+    await lat(s, 'şarax ezar mott şarax ezar mott şarax ezar mott');
+    ck('téléphone : pas de défilement horizontal avec des mots cliquables', (await ev(s, 'document.documentElement.scrollWidth<=document.documentElement.clientWidth')) === true);
+    await br.send('Target.closeTarget', { targetId: t.targetId });
+
+    L('== 6. Erreurs');
     ck('aucune exception ni erreur de console', errors.length === 0, errors.join(' || '));
     L('TOTAL : ' + ok + ' OK, ' + ko + ' échec(s)');
   } catch (e) { L('ERREUR', e.stack || e.message); ko++; }
