@@ -183,6 +183,7 @@
     el.lblReport.textContent = t.report;
     el.btnReportProblem.textContent = t.reportProblem;
     updateShareUI();
+    updateReverseUI();
     // En tchétchène, « Versi » se place après le numéro
     el.verFoot.textContent = state.lang === 'ce' ? WEB_VERSION + ' ' + t.aboutVersion : t.aboutVersion + ' ' + WEB_VERSION;
     el.verFoot.title = 'engine ' + (window.CLS_ENGINE_VERSION || '');
@@ -591,6 +592,49 @@
     window.addEventListener('resize', function () { if (shareOpen) placeShareMenu(shareOpen.menu, shareOpen.button); });
   }
 
+  // ---------- Écrire en latin -> cyrillique (prototype 2.7) ----------
+  // Sous le champ « Lettres latines » : ce qui est écrit en latin 1992 est converti en cyrillique, en direct. La conversion est
+  // celle de reverse.js (règles + dictionnaire inversé construit à partir du moteur) : elle choisit un résultat par défaut pour les
+  // lettres ambiguës (ş = ш ou щ, i = и ou ы, e = е ou э…). Rien n'est envoyé.
+  var rev = { block: null, out: null, label: null, copyLabel: null, copy: null };
+
+  function initReverse() {
+    if (!window.CLS_REV || !el.latInput) return;
+    var field = el.latInput.closest ? el.latInput.closest('.alpha-field') : null;
+    if (!field || !field.parentNode) return;
+    var block = document.createElement('div');
+    block.id = 'revBlock'; block.className = 'rev-block'; block.hidden = true;
+    var panel = document.createElement('div'); panel.className = 'out-panel';
+    var head = document.createElement('div'); head.className = 'out-head';
+    var label = document.createElement('span'); label.id = 'lblRevCyr'; label.className = 'lat';
+    var actions = document.createElement('div'); actions.className = 'out-actions';
+    var copy = document.createElement('button'); copy.id = 'revCopy'; copy.type = 'button'; copy.className = 'btn-copy';
+    copy.appendChild(document.createTextNode('⧉ '));
+    var copyLabel = document.createElement('span'); copy.appendChild(copyLabel);
+    var out = document.createElement('div'); out.id = 'revOut'; out.setAttribute('dir', 'auto'); out.setAttribute('aria-live', 'polite');
+    actions.appendChild(copy); head.appendChild(label); head.appendChild(actions);
+    panel.appendChild(head); panel.appendChild(out); block.appendChild(panel);
+    field.parentNode.insertBefore(block, field.nextSibling);
+    rev.block = block; rev.out = out; rev.label = label; rev.copyLabel = copyLabel; rev.copy = copy;
+    el.latInput.addEventListener('input', updateReverse);
+    copy.addEventListener('mousedown', function (e) { e.preventDefault(); });
+    copy.addEventListener('click', function () { copyText(rev.out.textContent, rev.copy); });
+  }
+
+  function updateReverse() {
+    if (!rev.block) return;
+    var v = el.latInput.value;
+    if (!v.trim()) { rev.block.hidden = true; rev.out.textContent = ''; return; }
+    rev.out.textContent = window.CLS_REV.convert(v).text;
+    rev.block.hidden = false;
+  }
+
+  function updateReverseUI() {
+    if (!rev.block) return;
+    var t = T[state.lang] || T[DEFAULT_LANGUAGE];
+    rev.label.textContent = t.cyr;
+    rev.copyLabel.textContent = t.copy;
+  }
   // ---------- Mesure d'audience anonyme (GoatCounter), seulement si un code de site est configuré ----------
   // Aucun cookie. Ne compte rien : sur un poste local ou un fichier, si le navigateur envoie « Ne pas me suivre » (DNT)
   // ou « Global Privacy Control ». Le texte saisi n'est jamais transmis : le compteur ne voit que la visite de la page.
@@ -619,8 +663,13 @@
       function (r) { return !!(r && r.isLoaded); },
       function () { return false; }
     );
+    // le dictionnaire du convertisseur inverse est construit avec le moteur : dès qu'il est prêt, la conversion s'actualise
+    engineReady.then(function (ok) {
+      if (ok && window.CLS_REV) { try { window.CLS_REV.init(window.translate, window.CLS_DATA); updateReverse(); } catch (e) { /* convertisseur sans dictionnaire */ } }
+    });
 
     buildAlphabet();
+    initReverse();
     applyLanguage(pickInitialLang());
     initLangMenu();
     initShare();
