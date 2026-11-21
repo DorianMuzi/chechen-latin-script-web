@@ -592,6 +592,19 @@
     window.addEventListener('resize', function () { if (shareOpen) placeShareMenu(shareOpen.menu, shareOpen.button); });
   }
 
+  // ---------- Texte reçu d'une autre application (cible de partage du site installé) ----------
+  var lastShareLatin = false;
+
+  // Texte contenu dans l'adresse (« ?text=… », sinon « ?title=… »), nettoyé et plafonné ; '' s'il n'y en a pas. Il n'est jamais
+  // interprété comme du code de page : il est seulement placé dans un champ de saisie (value).
+  function readIncomingShare() {
+    var p;
+    try { p = new URLSearchParams(window.location.search); } catch (e) { return ''; }
+    var s = (p.get('text') || p.get('title') || '').replace(/\r\n?/g, '\n').trim();
+    // une adresse seule (partage d'une page) n'est pas du texte à convertir
+    if (!s || /^https?:\/\/\S+$/i.test(s)) return '';
+    return s.slice(0, 2000);
+  }
   // ---------- Écrire en latin -> cyrillique (prototype 2.7) ----------
   // Sous le champ « Lettres latines » : ce qui est écrit en latin 1992 est converti en cyrillique, en direct. La conversion est
   // celle de reverse.js (règles + dictionnaire inversé construit à partir du moteur) : elle choisit un résultat par défaut pour les
@@ -745,8 +758,25 @@
     if (/^#t=/.test(window.location.hash || '')) {
       try { window.history.replaceState(null, '', window.location.pathname + window.location.search); } catch (e) { /* adresse inchangée */ }
     }
+    // Texte reçu d'une autre application (« Partager vers Chechen Latin Script », site installé sur téléphone) : adresse « ?text=… ».
+    // Texte avec du cyrillique → champ principal (converti en latin) ; texte en latin → champ « Lettres latines » (converti en cyrillique).
+    var incoming = readIncomingShare();
+    if (incoming) {
+      if (/[\u0400-\u04FF]/.test(incoming)) {
+        el.input.value = incoming;
+        lsSet(LS.draft, incoming);
+      } else {
+        el.latInput.value = incoming;
+        setAlphaOpen(true, false);
+        lastShareLatin = true;
+      }
+    }
+    if (window.location.search) {
+      try { window.history.replaceState(null, '', window.location.pathname + window.location.hash); } catch (e) { /* adresse inchangée */ }
+    }
     autoResize();
     run();
+    if (lastShareLatin) updateReverse();   // texte latin reçu d'une autre application : le résultat cyrillique s'affiche
 
     startStats();
 

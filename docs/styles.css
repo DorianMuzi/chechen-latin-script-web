@@ -899,16 +899,17 @@ body.web .banner .logo { width: 64px; height: 52px; margin: 0 6px 0 2px; }
 /* ---- Sélecteur de thème (automatique / clair / sombre) : propre au site ----
    (l'extension a maintenant une icône dans sa bannière ; ces règles ne viennent donc plus du style de la popup) */
 .theme-seg {
-  position: relative; display: inline-grid; grid-template-columns: repeat(3, 34px); direction: ltr; --i: 0;
+  --sw: 34px; --sh: 28px;
+  position: relative; display: inline-grid; grid-template-columns: repeat(3, var(--sw)); direction: ltr; --i: 0;
   padding: 2px; border: 1px solid var(--n-line2); background: var(--n-surface); border-radius: 999px;
 }
 .theme-seg .thumb {
-  position: absolute; top: 2px; left: 2px; width: 34px; height: 28px; box-sizing: border-box; border-radius: 999px;
+  position: absolute; top: 2px; left: 2px; width: var(--sw); height: var(--sh); box-sizing: border-box; border-radius: 999px;
   background: var(--chip-bg); border: 1px solid var(--accent-border);
-  transform: translateX(calc(var(--i) * 34px)); transition: transform .22s cubic-bezier(.4, .1, .2, 1);
+  transform: translateX(calc(var(--i) * var(--sw))); transition: transform .22s cubic-bezier(.4, .1, .2, 1);
 }
 .theme-seg button {
-  position: relative; z-index: 1; height: 28px; padding: 0; border: 0; background: transparent; border-radius: 999px;
+  position: relative; z-index: 1; height: var(--sh); padding: 0; border: 0; background: transparent; border-radius: 999px;
   color: var(--n-text3); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: color .15s;
 }
 .theme-seg button svg { width: 15px; height: 15px; display: block; }
@@ -936,3 +937,28 @@ body.web #revOut { max-height: none; overflow-y: visible; overflow-wrap: anywher
 .rev-w:hover { background: var(--chip-bg); }
 .rev-w:focus-visible { outline: 3px solid rgba(var(--cossack-rgb), .55); outline-offset: 2px; }
 .rev-doubt { text-decoration: underline dotted; text-decoration-thickness: 2px; text-underline-offset: 5px; }
+
+/* ---- Téléphone / écran tactile (2.8) : zones tactiles d'au moins 44 px, double cadre du résultat cyrillique retiré ---- */
+/* (le style de la popup de l'extension, repris par le site, encadre déjà « .rev-block » : sur le site le cadre est celui de .out-panel) */
+body.web .rev-block { border: 0; background: none; padding: 0; border-radius: 0; }
+body.web button, body.web a, body.web .alpha-key, body.web .rev-w { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+@media (pointer: coarse), (max-width: 480px) {
+  .theme-seg { --sw: 48px; --sh: 44px; }
+  .theme-seg button svg { width: 19px; height: 19px; }
+  body.web .lang-btn { min-height: 44px; }
+  body.web .out-panel .btn-copy, body.web .alpha-field-actions .btn-copy { min-height: 44px; padding: 10px 16px; }
+  body.web .alpha-shift { min-width: 48px; height: 44px; }
+  body.web #alphaClear { min-width: 44px; min-height: 44px; font-size: 18px; }
+  body.web .alpha-field-actions { gap: 4px; }
+  body.web .rev-w { display: inline-block; padding: 9px 3px; margin: 0 -2px; }
+  body.web .lang-item { min-height: 46px; }
+  body.web .web-foot a, body.web .web-link { display: inline-block; padding: 14px 5px; }
+  body.web .web-foot { line-height: 1.2; }
+  body.web .alpha-keys { grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 8px; }
+  body.web .alpha-key { height: 50px; min-width: 44px; }
+  body.web .misal-hint { min-height: 44px; }
+  body.web .alpha-toggle { min-height: 48px; }
+}
+@supports (padding: max(0px)) {
+  body.web { padding-bottom: env(safe-area-inset-bottom); }
+}
