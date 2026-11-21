@@ -93,6 +93,7 @@ const ck = (name, cond, extra) => { if (cond) { ok++; L('  OK   ' + name); } els
     ck('« Kopi yaŋ » du résultat copie le cyrillique', JSON.stringify(JSON.parse(await ev(s, 'JSON.stringify(window.__clip)'))) === JSON.stringify(['Нохчийн']));
     { const sh = await br.send('Page.captureScreenshot', { format: 'png' }, s); fs.writeFileSync(path.join(OUT, 'rev-desktop.png'), Buffer.from(sh.data, 'base64')); }
     { const wt = JSON.parse(await ev(s, "JSON.stringify({lat:getComputedStyle(document.getElementById('latInput')).fontWeight,cyr:getComputedStyle(document.getElementById('revOut')).fontWeight})")); ck('ni le latin ni le cyrillique ne sont en gras (400)', wt.lat === '400' && wt.cyr === '400', JSON.stringify(wt)); }
+    { const fz = JSON.parse(await ev(s, "JSON.stringify({lat:getComputedStyle(document.getElementById('latInput')).fontSize,cyr:getComputedStyle(document.getElementById('revOut')).fontSize})")); ck('latin et cyrillique ont la même taille de police', fz.lat === fz.cyr, JSON.stringify(fz)); }
     const lbl = await ev(s, "document.getElementById('lblRevCyr').textContent");
     ck('étiquette traduite (anglais : « Cyrillic »)', lbl === 'Cyrillic', lbl);
 
