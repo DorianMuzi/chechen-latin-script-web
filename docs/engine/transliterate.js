@@ -33,6 +33,8 @@ const defaultAlphabet = {
   'ю́': 'yú', 'я́': 'yá', 'ё': 'yo', 'а̄': 'ā', 'ӯ':'ū', 'ӣ':'ī'
 };
 
+// Mots dont le « н » final dépend du contexte (voir phase 0.2b) : nom propre (majuscule + nom propre) → « n », sinon « ŋ ».
+const NAME_N_WORDS = ['сан', 'бан'];
 function isUppercaseLetter(char) {
   return char >= 'A' && char <= 'Z' || char >= 'А' && char <= 'Я';
 }
@@ -295,7 +297,16 @@ function shouldTransformNToEng(index, text) {
 
     const maxLen = Math.max(...validSequences.map(seq => seq.length));
     const start = Math.max(0, index - maxLen);
-    const precedingText = text.slice(start, index);
+    let precedingText = text.slice(start, index);
+
+    // Mot ENTIÈREMENT en majuscules d'au moins 5 lettres (titre, intertitre : « НОХЧИЙН ») : mêmes séquences qu'en
+    // minuscule. Les mots de 4 lettres ou moins restent traités tels quels (sigles : РАН, ООН…).
+    let ws = index;
+    while (ws > 0 && /[a-zA-ZЀ-ӿ]/.test(text[ws - 1])) ws--;
+    const wholeWord = text.slice(ws, index + 1);
+    if (wholeWord.length >= 5 && wholeWord === wholeWord.toUpperCase() && wholeWord !== wholeWord.toLowerCase()) {
+      precedingText = precedingText.toLowerCase();
+    }
 
     return validSequences.some(seq => precedingText.endsWith(seq));
   }
@@ -486,6 +497,30 @@ function translate(text) {
     }
   }
 
+  // 0.2b - Mots « nom propre / mot courant » : « Сан » (San des noms de lieux), « Бан » (nom de personne)…
+  // Écrit avec une MAJUSCULE et suivi d'un nom propre (espaces ou trait d'union, puis une majuscule : « Сан Андрес »,
+  // « Бан Говд-е ») le mot garde son « n ». Dans tous les autres cas (minuscule, ou majuscule devant un mot en
+  // minuscule : le mot courant, verbe ou nom) le « н » final est FORCÉ en « ŋ » (« Ŋ » si le mot est tout en majuscules).
+  // Règle de contexte ; la liste est NAME_N_WORDS (déclarée en tête du fichier).
+  {
+    const nameRegex = new RegExp('(?<![\\p{L}\\u04C0])(' + NAME_N_WORDS.join('|') + ')(?![\\p{L}\\u04C0])', 'giu');
+    const nameMatches = [...text.matchAll(nameRegex)].reverse();
+    for (const match of nameMatches) {
+      const found = match[0];
+      const end = match.index + found.length;
+      const isCapFirst = found[0] !== found[0].toLowerCase();
+      const followedByName = /^(?:[ \u00A0]+|-)\p{Lu}/u.test(text.slice(end));
+      if (isCapFirst && followedByName) {
+        const marker = `__SPECIAL_N_WORD_${markerIndex}__`;
+        specialNWordMarkers.set(marker, found);
+        text = text.slice(0, match.index) + marker + text.slice(end);
+        markerIndex++;
+      } else {
+        const ng = found === found.toUpperCase() ? 'Ŋ' : 'ŋ';
+        text = text.slice(0, end - 1) + ng + text.slice(end);
+      }
+    }
+  }
   // 0.3 - Mots spéciaux de special_words.txt : mots écrits avec un « I » latin (ou une variante)
   // à la place de la palochka. On normalise EN PLACE ces caractères en « Ӏ » (U+04C0) pour que le
   // pipeline normal les lise comme palochka. Aucun marqueur : le nombre de mots est conservé.

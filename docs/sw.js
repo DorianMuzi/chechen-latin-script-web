@@ -1,5 +1,5 @@
 /* Généré par tools/build.cjs. Met le site en cache pour qu'il fonctionne hors ligne. */
-const CACHE = "cls-web-60e065047e";
+const CACHE = "cls-web-8b79800f58";
 const FILES = [
   "./",
   "LICENSE",
